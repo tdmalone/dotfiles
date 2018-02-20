@@ -1,0 +1,55 @@
+{
+    "ace": {
+        "@behavioursEnabled": true,
+        "@keyboardmode": "default",
+        "@showGutter": true,
+        "@showInvisibles": true,
+        "@theme": "ace/theme/cloud9_day",
+        "custom-types": {
+            "json()": {
+                "^searchresults": "c9search",
+                "bash_aliases": "sh",
+                "bash_profile": "sh",
+                "settings": "javascript"
+            }
+        },
+        "statusbar": {
+            "@show": true
+        }
+    },
+    "collab": {
+        "@timeslider-visible": false
+    },
+    "debug": {
+        "@pause": 0
+    },
+    "general": {
+        "@propose": true,
+        "@skin": "flat-light"
+    },
+    "installer": {
+        "@auto": false
+    },
+    "openfiles": {
+        "@show": false
+    },
+    "output": {
+        "@backgroundColor": "#e0e5e7",
+        "@foregroundColor": "#333333",
+        "@selectionColor": "#aebabf"
+    },
+    "projecttree": {
+        "@showhidden": true
+    },
+    "tabs": {
+        "@show": true
+    },
+    "terminal": {
+        "@antialiasedfonts": false,
+        "@backgroundColor": "#eaf0f7",
+        "@foregroundColor": "#000000",
+        "@selectionColor": "#bed1e3",
+        "@fontfamily": "Source Code Pro for Powerline, Monaco, Ubuntu Mono, Menlo, Consolas, monospace",
+        "@fontsize": 14
+    }
+}
