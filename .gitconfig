@@ -1,0 +1,156 @@
+# [user] key is at the top, [alias] key is at the bottom, every other key is
+# sorted alphabetically. Some keys may be repeated multiple times for use on
+# different environments - check the comment beside it and ensure you use the
+# right one.
+
+[user]
+  name = Tim Malone
+  email = tdmalone@gmail.com          # For personal stuff.
+  email = tim.malone@chromatix.com.au # For work stuff.
+
+[commit]
+  gpgsign = true
+[core]
+  autocrlf = true  # For Windows machines.
+  autocrlf = input # For MacOS machines.
+  excludesfile = C:\\Users\\Tim\\Documents\\gitignore_global.txt # This mainly just excludes Thumbs.db on Windows & .DS_Store on MacOS.
+
+[diff]
+  tool = bc
+  prompt = false
+
+[difftool "bc"]
+  cmd = 'C:/Program Files (x86)/Beyond Compare 4/BComp.exe' \"$LOCAL\" \"$REMOTE\"
+
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+
+[format]
+    pretty = oneline
+
+[grep]
+    linenumber = true
+
+[interactive]
+    singleKey = true
+
+[merge]
+    tool = bc
+    prompt = false
+
+[mergetool "bc"]
+    path = "C:/Program Files (x86)/Beyond Compare 4/BComp.exe"
+    # prompt = false        # May or may not be needed here.
+    # trustExitCode = true  # May or may not be needed here.
+
+[push]
+    default = simple
+
+[alias]
+
+  # Aliases are generally sorted in groups, but they could probably be sorted
+  # (and documented!) better.
+
+  # @see https://git-scm.com/docs/pretty-formats
+  lol = log --graph --pretty=format:'%C(auto)%h %C(green bold)%an %C(cyan)%ar%C(reset)%C(auto) %s%d'        # Relative date.
+  lold = log --graph --pretty=format:'%C(auto)%h %C(green bold)%an %C(cyan)%aD%C(reset)%C(auto) %s%d'       # Absolute date.
+  lola = log --all --graph --pretty=format:'%C(auto)%h %C(green bold)%an %C(cyan)%ar%C(reset)%C(auto) %s%d' # All branches.
+
+  # Commit and Push in one.
+  cp = !git commit $@ && git push
+  latest = !git lol -10
+  recent = !git latest
+  today = !git lol --since="00:00"
+  yesterday = !git lol --since=1.day --before=="00:00"
+  week = !git lol --since='last Monday'
+  merges = !git lol --merges
+  one = !git show --name-only $1
+
+  devdiff = !sh -c 'git diff --name-only | grep -v '^dist/' | xargs git diff --' -
+  devadd = !sh -c 'git add -p $(git diff --name-only | grep -v '^dist/' | xargs echo)' -
+  devgrep = !sh -c 'git grep $1 | grep -v '^dist/'' - # TODO: Find a way to get colouring still.
+
+  # Deletes a branch both locally AND remotely.
+  delbranch = !sh -c 'git branch -d $1 && git push origin --delete refs/heads/$1' -
+
+  # Gets merged branches, skips any branches we know we always want to keep
+  # (including the current one), trims whitespace, and then deletes the branches
+  # locally and remotely. Note the excluded branches includes specific named
+  # branches for the current dev team at Chromatix.
+  delmerged = "!f(){ git branch --merged | awk '{$1=$1};1' | egrep -v \"(^\\*)|(^(master|staging|hotfixes|julian|tim|tong|dan|david|dave)$)\" | sed 's,.,git delbranch \\0,e'; }; f"
+
+  uncommit = reset --soft HEAD~
+  unstage = !echo && git reset HEAD && echo && git status
+  unstash = stash pop
+  undo = !git uncommit && git unstage
+
+  amend = commit --amend --no-edit
+
+  grepall = !sh -c 'git rev-list --all --abbrev-commit | xargs git grep -n $1' -
+  added = !git lol --diff-filter=A
+  deleted = !git lol --diff-filter=D
+  modified = !git lol --diff-filter=M
+
+  touch = !sh -c 'touch $1 && ls -la' -
+
+  # Sets up local tracking branches for EVERY remote branch.
+  # @see https://stackoverflow.com/a/10312587/1982136 && https://stackoverflow.com/a/14994923/1982136
+  allbranches = "!f() { git branch -r | grep -v '\\->' | while read remote; do git branch --track ${remote#origin/} $remote; done; }; f"
+
+  # Quick 'continuous integration':
+  #
+  # - Run as 'git ci' to merge the current branch into master and update
+  #   everything.
+  # - Run as 'git ci branch' to merge the current branch into 'branch' and
+  #   update everything.
+  # - Run as 'git ci branch tag' to merge the current branch into 'branch' AND
+  #   tag with 'tag' and update everything.
+  #
+  # Examples:
+  # - git ci               # Merge a current branch eg. tim into master.
+  # - git ci tim           # Merge a current eg. feature branch into tim.
+  # - git ci master v0.2.2 # Merge a current branch eg. tim into master and tag.
+  ci = !sh -c 'git ci2 ${1+} "${1-master}" $(git current-branch) $2' -
+  ci2 = !echo && sh -c 'git checkout $1 && git merge --no-ff --no-edit --log $2 && "${3+git tag}" "${3-}" && git checkout $2 && git merge $1 && git update' -
+  current-branch = rev-parse --abbrev-ref HEAD
+
+  # Does a quick no-ff merge (with a few other options) from the current branch
+  # into the master (or specified) branch. Like git ci above, but doesn't merge
+  # back, doesn't update, and leaves you on the target branch ready to continue.
+  noff = !sh -c 'git noff2 ${1+} "${1-master}" $(git current-branch) $2' -
+  noff2 = !echo && sh -c 'git checkout $1 && git merge --no-ff --no-edit --log $2' -
+  todo = grep -i "todo"
+  branches = branch -vv
+
+  deltag = !sh -c 'git tag -d $1 && git push origin --delete $1' -
+  supertag = !git deltag $1 && git tag $1 && git push --tags origin
+  bump = !git commit -am "Version bump" && git tag $1 && git push && git push --tags
+
+  fix = !git add . && git stash && git stash drop && git status
+  conflict = grep \"<<<<<<< HEAD\"
+
+  statii = !echo && sh -c 'git latest && echo && git status && echo && git branch -vv && echo && git stash list' -
+  pullpush = !echo && sh -c 'git pull --all && echo && git pull --tags && echo && git push --all && echo && git push --tags' -
+  update = !sh -c 'git pullpush && echo && git statii' -
+
+  # Pull all branches from the remote.
+  # NOT TESTED YET.
+  pullall = !for remote in `git branch -r`; do git branch --track ${remote#origin/} $remote; done
+
+  purgeignore = !echo && git status && echo && git rm -r --cached . && echo && git add . && echo && echo && git status
+  changelog = log --pretty=format:'%C(cyan bold)%ai %C(auto)%d'
+  remotecp = !sh -c 'git --git-dir=C:/Users/Tim/Dropbox/Chromatix/htdocs/$0/assets/themes/child-theme/.git format-patch -k -1 --stdout $1 | git am -3 -k'
+
+  readme = !start chrome $(sed 's,\\.git,,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
+
+  network = !~/Dropbox/Chromatix/htdocs/gitlab-network-graph/scripts/network.sh && start chrome "http://localhost/gitlab-network-graph"
+
+  wrike = !start chrome "https://www.wrike.com/open.htm?id=$(cat .wrike)"
+  web = !git network && git wrike
+
+  network2 = !start chrome $(sed 's,\\.git,/network,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
+  releases = !start chrome $(sed 's,\\.git,/releases,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
+  hub = !start chrome $(sed 's,\\.git,/,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)

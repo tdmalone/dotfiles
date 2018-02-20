@@ -1,0 +1,10 @@
+
+# There won’t be much here, but this will just include the DOS version of bash
+# aliases, for situations when I need to run a certain command in the Windows
+# command prompt.
+
+# Run bash in a Docker container, assuming the container is named
+# (your current basename)Instance. Similar to the *sh alias, but here because
+# arrow keys and tab completion doesn't seem to work in winpty. See .aliases for
+# more.
+dbash=for /F %i in ("%cd%") do @set currentdir=%~ni&& call docker start %currentdir%Instance && call docker exec -it %currentdir%Instance bash

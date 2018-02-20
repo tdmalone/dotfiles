@@ -1,0 +1,74 @@
+
+# Shell aliases.
+
+# Some quick ls aliases.
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Laziness.
+alias e="exit"
+
+# Git shortcuts.
+# Git aliases themselves should be defined in .gitconfig.
+alias ga="git add"
+alias gaa="git add ."
+alias gam="git amend"
+alias gap="git add -p"
+alias gb="git branch"
+alias gc="git commit"
+alias gce="git commit --allow-empty -m 'Empty commit for testing'"
+alias gcm="git commit -m"
+alias gco="git checkout"
+alias gd="git diff"
+alias gdc="git diff --cached"
+alias gf="git fix"
+alias gg="git grep -i"
+alias gl="git latest"
+alias gm="git merge"
+alias gn="git noff"
+alias gp="git push"
+alias gr="git remote -vv"
+alias gs="git status"
+alias gt="git tag"
+alias gu="git update"
+alias bfg="java -jar ~/bfg.jar"
+
+# Yarn shortcuts.
+alias y="yarn"
+alias yl="yarn lint"
+alias yp="yarn publish"
+alias yt="yarn test"
+
+# Docker shortcuts.
+# TESTED IN GIT BASH ONLY.
+# TODO: See more at https://github.com/tcnksm/docker-alias/blob/master/zshrc
+
+# Build in the current directory.
+alias dbuild="docker build -t \$(basename \$(pwd)) \$(pwd)"
+
+# Run bash in a Docker container, assuming the container is named (your current basename)Instance.
+alias dbash="docker start \$(basename \$(pwd))Instance && docker exec -it \$(basename \$(pwd))Instance bash"
+
+# Stop and remove ALL Docker containers.
+alias drmc="echo && echo 'Removing all Docker containers...' && echo && docker ps -a | awk '{print \$1}' | grep -v CONTAINER | xargs -r docker stop | xargs -r docker rm"
+
+alias drunv="docker run -d -p 8080:80 -p 8081:443 -v '\$(pwd)'/src:/var/www/html/src --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
+alias drun="docker run -d -p 8080:80 -p 8081:443 --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
+alias dlog="docker logs \$(basename \$(pwd))Instance"
+alias dstop="docker stop \$(basename \$(pwd))Instance"
+alias dstart="docker start \$(basename \$(pwd))Instance"
+alias datt="docker attach \$(basename \$(pwd))Instance" # Reattach a terminal & stdin.
+alias drs="docker restart \$(basename \$(pwd))Instance"
+alias drm="dstop && docker rm \$(basename \$(pwd))Instance"
+alias dps="docker ps -a"
+alias di="docker images"
+
+# TODO: Add a command that will docker rmi on any 's in column 1 of docker images.
+
+# Enter a failed build container at the point it failed.
+# TODO: This doesn't run the final command yet due to xargs not coming from a tty.
+alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: docker run -it % bash -il"
+
+# Testa Lambda function in the current directory.
+alias lambda="docker run --rm -v \$(pwd):/var/task lambci/lambda index.handler"
