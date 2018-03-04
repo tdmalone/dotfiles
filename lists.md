@@ -1,7 +1,7 @@
 # Lists of typically installed software
 
 * **[apt-get](apt-list.txt)**<br />
-  To generate run `apt list --installed > apt-list.txt`
+  To generate run `apt list --installed | grep -v 'Listing...' > apt-list.txt`
 
 * **[Chocolatey](choco-list.txt)**<br />
   To generate run `choco list --local-only > choco-list.txt`
