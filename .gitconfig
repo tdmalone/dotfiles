@@ -7,12 +7,15 @@
   name = Tim Malone
   email = tdmalone@gmail.com          # For personal stuff.
   email = tim.malone@chromatix.com.au # For work stuff.
+  signingkey = EFFECE71
 
 [commit]
   gpgsign = true
+
 [core]
   autocrlf = true  # For Windows machines.
   autocrlf = input # For MacOS machines.
+  editor = /usr/bin/vim
   excludesfile = C:\\Users\\Tim\\Documents\\gitignore_global.txt # This mainly just excludes Thumbs.db on Windows & .DS_Store on MacOS.
 
 [diff]
@@ -34,6 +37,9 @@
 [grep]
     linenumber = true
 
+[gpg]
+  program = "C:/Program Files (x86)/GNU/GnuPG/gpg2.exe"
+
 [interactive]
     singleKey = true
 
@@ -43,8 +49,6 @@
 
 [mergetool "bc"]
     path = "C:/Program Files (x86)/Beyond Compare 4/BComp.exe"
-    # prompt = false        # May or may not be needed here.
-    # trustExitCode = true  # May or may not be needed here.
 
 [push]
     default = simple
@@ -61,6 +65,7 @@
 
   # Commit and Push in one.
   cp = !git commit $@ && git push
+
   latest = !git lol -10
   recent = !git latest
   today = !git lol --since="00:00"
@@ -76,11 +81,15 @@
   # Deletes a branch both locally AND remotely.
   delbranch = !sh -c 'git branch -d $1 && git push origin --delete refs/heads/$1' -
 
+  # Creates a new branch off the current HEAD, and sets the upstream to the same name.
+  newbranch = !sh -c 'git checkout -b $1 && git push -u origin $1' -
+
   # Gets merged branches, skips any branches we know we always want to keep
   # (including the current one), trims whitespace, and then deletes the branches
   # locally and remotely. Note the excluded branches includes specific named
   # branches for the current dev team at Chromatix.
-  delmerged = "!f(){ git branch --merged | awk '{$1=$1};1' | egrep -v \"(^\\*)|(^(master|staging|hotfixes|julian|tim|tong|dan|david|dave)$)\" | sed 's,.,git delbranch \\0,e'; }; f"
+  # TODO: Might want to checkout master first?
+  delmerged = "!f(){ git branch --merged | awk '{$1=$1};1' | egrep -v \"(^\\*)|(^(master|staging|hotfixes|nightly|testing|julian|tim|tong|dan|david|dave)$)\" | sed 's,.,git delbranch \\0,e'; }; f"
 
   uncommit = reset --soft HEAD~
   unstage = !echo && git reset HEAD && echo && git status
@@ -90,14 +99,15 @@
   amend = commit --amend --no-edit
 
   grepall = !sh -c 'git rev-list --all --abbrev-commit | xargs git grep -n $1' -
-  added = !git lol --diff-filter=A
-  deleted = !git lol --diff-filter=D
-  modified = !git lol --diff-filter=M
+  added = !git lold --diff-filter=A
+  deleted = !git lold --diff-filter=D
+  modified = !git lold --diff-filter=M
 
   touch = !sh -c 'touch $1 && ls -la' -
 
   # Sets up local tracking branches for EVERY remote branch.
-  # @see https://stackoverflow.com/a/10312587/1982136 && https://stackoverflow.com/a/14994923/1982136
+  # @see https://stackoverflow.com/a/10312587/1982136
+  # @see https://stackoverflow.com/a/14994923/1982136
   allbranches = "!f() { git branch -r | grep -v '\\->' | while read remote; do git branch --track ${remote#origin/} $remote; done; }; f"
 
   # Quick 'continuous integration':
@@ -122,6 +132,7 @@
   # back, doesn't update, and leaves you on the target branch ready to continue.
   noff = !sh -c 'git noff2 ${1+} "${1-master}" $(git current-branch) $2' -
   noff2 = !echo && sh -c 'git checkout $1 && git merge --no-ff --no-edit --log $2' -
+
   todo = grep -i "todo"
   branches = branch -vv
 
@@ -133,7 +144,7 @@
   conflict = grep \"<<<<<<< HEAD\"
 
   statii = !echo && sh -c 'git latest && echo && git status && echo && git branch -vv && echo && git stash list' -
-  pullpush = !echo && sh -c 'git pull --all && echo && git pull --tags && echo && git push --all && echo && git push --tags' -
+  pullpush = !echo && sh -c 'git pull --all && echo && git pull --tags && echo && git push --all && echo && SKIP_HOOKS=true git push --tags' -
   update = !sh -c 'git pullpush && echo && git statii' -
 
   # Pull all branches from the remote.
@@ -154,3 +165,6 @@
   network2 = !start chrome $(sed 's,\\.git,/network,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
   releases = !start chrome $(sed 's,\\.git,/releases,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
   hub = !start chrome $(sed 's,\\.git,/,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
+
+  chrclone = !sh -c 'git clone git@github.com:ChromatixAU/'"${1}"'.git'
+  tdmclone = !sh -c 'git clone git@github.com:tdmalone/'"${1}"'.git'

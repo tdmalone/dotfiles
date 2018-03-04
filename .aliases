@@ -9,6 +9,9 @@ alias l='ls -CF'
 # Laziness.
 alias e="exit"
 
+# Remove any Dropbox conflicted files deep down from the current location.
+alias dbconflict="find . -name *\\ conflicted\\ copy\\ 20* -type f -print0 | xargs -0 --no-run-if-empty rm --verbose"
+
 # Git shortcuts.
 # Git aliases themselves should be defined in .gitconfig.
 alias ga="git add"
@@ -16,19 +19,32 @@ alias gaa="git add ."
 alias gam="git amend"
 alias gap="git add -p"
 alias gb="git branch"
+alias gba="gbash"
+alias gbash="echo && echo 'Opening git bash in a new Window. Press Ctrl+C in that Window to start using it.' && c:/progra~1/git/git-bash.exe &"
 alias gc="git commit"
+alias gcam="git commit -am"
 alias gce="git commit --allow-empty -m 'Empty commit for testing'"
 alias gcm="git commit -m"
+alias gcmvb="git commit -m \"Version bump\" && gt"
+alias gcmvbc="git commit -m \"Version bump; changelog\" && gt"
 alias gco="git checkout"
+alias gcob="git checkout -b"
+alias gcom="git checkout master"
 alias gd="git diff"
+alias gdb="git delbranch"
 alias gdc="git diff --cached"
 alias gf="git fix"
 alias gg="git grep -i"
+alias gh="git hub"
 alias gl="git latest"
 alias gm="git merge"
 alias gn="git noff"
+alias gnb="git newbranch"
 alias gp="git push"
+alias gpl="git pull"
+alias gpuo="git push -u origin"
 alias gr="git remote -vv"
+alias grso="git remote set-url origin"
 alias gs="git status"
 alias gt="git tag"
 alias gu="git update"
@@ -39,20 +55,48 @@ alias y="yarn"
 alias yl="yarn lint"
 alias yp="yarn publish"
 alias yt="yarn test"
+alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
+
+# Gulp & Slush shortcuts.
+alias cwp="slush chromatix-wp"
+alias cwpu="slush chromatix-wp-undo"
+alias scwp="slush chromatix-wp"
+alias scwpu="slush chromatix-wp-undo"
+alias g="gulp"
+alias glh="gulp lint:html"
+alias gli="gulp lint"
+alias glj="gulp lint:js"
+alias glp="gulp lint:php"
+alias gls="gulp lint:sass"
+alias gre="gulp release"
+alias gv="gulp version"
+
+# Lint fix shortcuts.
+alias lfj="git ls-tree -r HEAD | grep \"\\.js$\" | awk '{print \$4}' | xargs node_modules/.bin/eslint --ignore-pattern '!.*.js' --fix"
+alias lfs="git ls-tree -r HEAD | grep \"\\.scss$\" | awk '{print \$4}' | xargs node_modules/.bin/stylelint --fix"
+alias lfp="git ls-tree -r HEAD | grep \"\\.php$\" | awk '{print \$4}' | xargs vendor/bin/phpcbf"
+alias lf="lfj && lfs && lfp"
 
 # Docker shortcuts.
 # TESTED IN GIT BASH ONLY.
 # TODO: See more at https://github.com/tcnksm/docker-alias/blob/master/zshrc
 
 # Build in the current directory.
-alias dbuild="docker build -t \$(basename \$(pwd)) \$(pwd)"
+alias dbuild="docker build -t \$(basename \$(pwd)) \$(pwd)" # *nix version.
+#alias dbuild="docker build -t $(basename $(pwd)) $(pwd)"   # Windows version.
 
 # Run bash in a Docker container, assuming the container is named (your current basename)Instance.
-alias dbash="docker start \$(basename \$(pwd))Instance && docker exec -it \$(basename \$(pwd))Instance bash"
+# NOTE: On Windows, arrow keys and tab completion will not work with winpty, so you might want to move to cmd for this instead. See doskeys for a similar macro. Then you can run 'start' from mingw (Git Bash) then then 'dbash' from the cmd that opens up.
+alias dbash="docker start \$(basename \$(pwd))Instance && docker exec -it \$(basename \$(pwd))Instance bash"      # *nix version.
+#alias dbash="docker start $(basename $(pwd))Instance && winpty docker exec -it $(basename $(pwd))Instance bash"  # Windows version.
 
 # Stop and remove ALL Docker containers.
 alias drmc="echo && echo 'Removing all Docker containers...' && echo && docker ps -a | awk '{print \$1}' | grep -v CONTAINER | xargs -r docker stop | xargs -r docker rm"
 
+# Remove ALL Docker images.
+alias drmi="echo && echo 'Removing all Docker images...' && echo && docker images | awk '{print \$3}' | grep -v IMAGE | xargs -r docker rmi"
+
+# *nix versions.
 alias drunv="docker run -d -p 8080:80 -p 8081:443 -v '\$(pwd)'/src:/var/www/html/src --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
 alias drun="docker run -d -p 8080:80 -p 8081:443 --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
 alias dlog="docker logs \$(basename \$(pwd))Instance"
@@ -61,14 +105,29 @@ alias dstart="docker start \$(basename \$(pwd))Instance"
 alias datt="docker attach \$(basename \$(pwd))Instance" # Reattach a terminal & stdin.
 alias drs="docker restart \$(basename \$(pwd))Instance"
 alias drm="dstop && docker rm \$(basename \$(pwd))Instance"
+
+# Windows versions.
+#alias drunv="docker run -d -p 8080:80 -p 8081:443 -v '$(cygpath -w $(pwd))'/src:/var/www/html/src --name $(basename $(pwd))Instance $(basename $(pwd))"
+#alias drun="docker run -d -p 8080:80 -p 8081:443 --name $(basename $(pwd))Instance $(basename $(pwd))"
+#alias dlog="docker logs $(basename $(pwd))Instance"
+#alias dstop="docker stop $(basename $(pwd))Instance"
+#alias dstart="docker start $(basename $(pwd))Instance"
+#alias datt="docker attach $(basename $(pwd))Instance" # Reattach a terminal & stdin.
+#alias drs="docker restart $(basename $(pwd))Instance"
+#alias drm="dstop && docker rm $(basename $(pwd))Instance"
+
 alias dps="docker ps -a"
 alias di="docker images"
 
-# TODO: Add a command that will docker rmi on any 's in column 1 of docker images.
+# TODO: Add a command that will docker rmi on any <none>'s in column 1 of docker images.
 
 # Enter a failed build container at the point it failed.
 # TODO: This doesn't run the final command yet due to xargs not coming from a tty.
-alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: docker run -it % bash -il"
+alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: docker run -it % bash -il"          # *nix version.
+#alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: winpty docker run -it % bash -il"  # Windows version.
 
-# Testa Lambda function in the current directory.
+# Test a Lambda function in the current directory.
 alias lambda="docker run --rm -v \$(pwd):/var/task lambci/lambda index.handler"
+
+# Pantheon terminus CLI.
+alias terminus=~/vendor/bin/terminus
