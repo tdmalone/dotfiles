@@ -10,9 +10,28 @@
                 },
                 "jQuery": {
                     "enabled": true
+                },
+                "jest": {
+                    "enabled": true
+                },
+                "winston": {
+                    "enabled": true
+                },
+                "jscrollpane": {
+                    "enabled": true
+                },
+                "npm": {
+                    "enabled": false
+                },
+                "phantomjs": {
+                    "enabled": true
+                },
+                "recaptcha": {
+                    "enabled": true
                 }
             }
-        }
+        },
+        "@unusedFunctionArgs": true
     },
     "run": {
         "configs": {
@@ -22,5 +41,23 @@
     },
     "welcome": {
         "@first": true
+    },
+    "ace": {
+        "@tabSize": 2
+    },
+    "general": {
+        "@stripws": true
+    },
+    "format": {
+        "jsbeautify": {
+            "@indent_inner_html": true,
+            "@keeparrayindentation": true
+        }
+    },
+    "python": {
+        "@version": "python3"
+    },
+    "aws": {
+        "@awsRegion": "ap-southeast-2"
     }
 }
