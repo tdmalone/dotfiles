@@ -47,9 +47,9 @@
     "terminal": {
         "@antialiasedfonts": false,
         "@backgroundColor": "#eaf0f7",
-        "@foregroundColor": "#000000",
-        "@selectionColor": "#bed1e3",
         "@fontfamily": "Source Code Pro for Powerline, Monaco, Ubuntu Mono, Menlo, Consolas, monospace",
-        "@fontsize": 14
+        "@fontsize": 14,
+        "@foregroundColor": "#000000",
+        "@selectionColor": "#bed1e3"
     }
 }
