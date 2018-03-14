@@ -1,10 +1,14 @@
 {
     "ace": {
+        "@antialiasedfonts": true,
         "@behavioursEnabled": true,
         "@keyboardmode": "sublime",
+        "@printMarginColumn": 100,
         "@showGutter": true,
         "@showInvisibles": true,
         "@theme": "ace/theme/chrome",
+        "@useWrapMode": true,
+        "@wrapBehavioursEnabled": true,
         "custom-types": {
             "json()": {
                 "^searchresults": "c9search",
@@ -15,26 +19,38 @@
         },
         "statusbar": {
             "@show": true
-        },
-        "@wrapBehavioursEnabled": true,
-        "@antialiasedfonts": true,
-        "@printMarginColumn": 100,
-        "@useWrapMode": true
+        }
+    },
+    "aws": {
+        "@useLambdaConfigEditor": true
     },
     "collab": {
         "@timeslider-visible": false
     },
+    "config": {
+        "init.js": {
+            "json()": "// You can access plugins via the 'services' global variable\n/*global services, plugin*/\n\n// to load plugins use\n// services.pluginManager.loadPackage([\n//     \"https://<user>.github.io/<project>/build/package.<name>.js\",\n//     \"~/.c9/plugins/<name>/package.json\",\n// ]);\n\n// Prevent the terminal from treating the mousewheel as up/down arrow keys in zsh.\n// @see https://github.com/c9/core/issues/270#issuecomment-196969854\n\nvar Terminal=require(\"plugins/c9.ide.terminal/aceterm/libterm\");\n\nTerminal.prototype.noScrollBack = function() {\n    return (this.mouseEvents || this.tmuxDotCover);\n};\n\nTerminal.prototype.mouseEvents = true;\n\nservices.tabManager.once(\"ready\", function() {\n    services.tabManager.getTabs().forEach(function(tab) {\n        updateEditor(tab.editor);\n    });\n    function updateEditor(editor) {\n        if (editor && editor.type == \"terminal\" && editor.ace)\n            editor.ace._eventRegistry.mousewheel.pop();\n    }\n    services.editors.on(\"create\", updateEditor, plugin);\n});\n"
+        },
+        "styles.css": {
+            "json()": ""
+        }
+    },
     "debug": {
         "@pause": 0
     },
+    "findinfiles": {
+        "@consolelaunch": true,
+        "@fullpath": true,
+        "@scrolldown": true
+    },
     "general": {
-        "@propose": true,
-        "@skin": "flat-light",
         "@confirmexit": true,
-        "@treestyle": "alternative",
         "@preview-navigate": true,
         "@preview-tree": true,
-        "@revealfile": true
+        "@propose": true,
+        "@revealfile": true,
+        "@skin": "flat-light",
+        "@treestyle": "alternative"
     },
     "installer": {
         "@auto": false
@@ -45,43 +61,28 @@
     "output": {
         "@backgroundColor": "#e0e5e7",
         "@foregroundColor": "#333333",
-        "@selectionColor": "#aebabf",
+        "@keepOutput": true,
         "@nosavequestion": true,
-        "@keepOutput": true
+        "@selectionColor": "#aebabf"
     },
     "projecttree": {
-        "@showhidden": true,
-        "@scope": true
+        "@scope": true,
+        "@showhidden": false,
+        "@hiddenFilePattern": "*.pyc, __pycache__, .~c9*, .git"
     },
     "tabs": {
-        "@show": true,
         "@asterisk": true,
+        "@show": true,
         "@title": true
     },
     "terminal": {
         "@antialiasedfonts": true,
         "@backgroundColor": "#eaf0f7",
+        "@blinking": true,
+        "@defaultEnvEditor": true,
         "@fontfamily": "Source Code Pro for Powerline, Monaco, Ubuntu Mono, Menlo, Consolas, monospace",
         "@fontsize": 12,
         "@foregroundColor": "#000000",
-        "@selectionColor": "#bed1e3",
-        "@blinking": true,
-        "@defaultEnvEditor": true
-    },
-    "config": {
-        "styles.css": {
-            "json()": ""
-        },
-        "init.js": {
-            "json()": "// You can access plugins via the 'services' global variable\n/*global services, plugin*/\n\n// to load plugins use\n// services.pluginManager.loadPackage([\n//     \"https://<user>.github.io/<project>/build/package.<name>.js\",\n//     \"~/.c9/plugins/<name>/package.json\",\n// ]);\n"
-        }
-    },
-    "findinfiles": {
-        "@fullpath": true,
-        "@scrolldown": true,
-        "@consolelaunch": true
-    },
-    "aws": {
-        "@useLambdaConfigEditor": true
+        "@selectionColor": "#bed1e3"
     }
 }
