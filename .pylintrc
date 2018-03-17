@@ -40,6 +40,8 @@ load-plugins=
 # --disable=W"
 #disable=
 
+# superfluous-parens,bad-whitespace
+disable=C0325,C0326
 
 [REPORTS]
 
