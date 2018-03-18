@@ -70,6 +70,24 @@ alias yp="yarn publish"
 alias yt="yarn test"
 alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
 
+# Composer shortcuts.
+alias c="composer"
+alias cl="composer lint"
+alias ct="composer test"
+
+# Webpack shortcuts.
+alias webpack="yarn webpack"
+alias yw="yarn webpack"
+
+# Make shortcuts.
+alias ml="make lint"
+alias mt="make test"
+
+# Other shortcuts.
+alias pl="pylint lambda_function.py | less"
+alias py="pl"
+alias tm="travis monitor"
+
 # Gulp & Slush shortcuts.
 alias cwp="slush chromatix-wp"
 alias cwpu="slush chromatix-wp-undo"
