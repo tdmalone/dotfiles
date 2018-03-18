@@ -1,5 +1,21 @@
 {
+    "ace": {
+        "@tabSize": 2
+    },
+    "aws": {
+        "@awsRegion": "ap-southeast-2"
+    },
+    "format": {
+        "jsbeautify": {
+            "@indent_inner_html": true,
+            "@keeparrayindentation": true
+        }
+    },
+    "general": {
+        "@stripws": true
+    },
     "language": {
+        "@unusedFunctionArgs": true,
         "tern_defs": {
             "json()": {
                 "browser": {
@@ -14,9 +30,6 @@
                 "jest": {
                     "enabled": true
                 },
-                "winston": {
-                    "enabled": true
-                },
                 "jscrollpane": {
                     "enabled": true
                 },
@@ -28,36 +41,23 @@
                 },
                 "recaptcha": {
                     "enabled": true
+                },
+                "winston": {
+                    "enabled": true
                 }
             }
-        },
-        "@unusedFunctionArgs": true
-    },
-    "run": {
-        "configs": {
-            "@inited": true,
-            "json()": {}
-        }
-    },
-    "welcome": {
-        "@first": true
-    },
-    "ace": {
-        "@tabSize": 2
-    },
-    "general": {
-        "@stripws": true
-    },
-    "format": {
-        "jsbeautify": {
-            "@indent_inner_html": true,
-            "@keeparrayindentation": true
         }
     },
     "python": {
         "@version": "python3"
     },
-    "aws": {
-        "@awsRegion": "ap-southeast-2"
+    "run": {
+        "configs": {
+            "@inited": "true",
+            "json()": {}
+        }
+    },
+    "welcome": {
+        "@first": true
     }
 }
