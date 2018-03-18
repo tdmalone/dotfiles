@@ -105,4 +105,3 @@ source ~/z.sh
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /home/tim/.config/yarn/global/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /home/tim/.config/yarn/global/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
-

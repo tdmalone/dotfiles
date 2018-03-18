@@ -1,58 +1,21 @@
-# [user] key is at the top, [alias] key is at the bottom, every other key is
-# sorted alphabetically. Some keys may be repeated multiple times for use on
-# different environments - check the comment beside it and ensure you use the
-# right one.
-
+[core]
+  editor = /usr/bin/vim
+  pager = cat
 [user]
   name = Tim Malone
-  email = tdmalone@gmail.com          # For personal stuff.
-  email = tim.malone@chromatix.com.au # For work stuff.
-  signingkey = EFFECE71
-
+  email = tdmalone@gmail.com
 [commit]
   gpgsign = true
-
-[core]
-  autocrlf = true  # For Windows machines.
-  autocrlf = input # For MacOS machines.
-  editor = /usr/bin/vim
-  excludesfile = C:\\Users\\Tim\\Documents\\gitignore_global.txt # This mainly just excludes Thumbs.db on Windows & .DS_Store on MacOS.
-
-[diff]
-  tool = bc
-  prompt = false
-
-[difftool "bc"]
-  cmd = 'C:/Program Files (x86)/Beyond Compare 4/BComp.exe' \"$LOCAL\" \"$REMOTE\"
-
-[filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
-
-[format]
-    pretty = oneline
-
-[grep]
-    linenumber = true
-
 [gpg]
-  program = "C:/Program Files (x86)/GNU/GnuPG/gpg2.exe"
-
+  program = gpg2
+[format]
+  pretty = oneline
+[grep]
+  linenumber = true
 [interactive]
-    singleKey = true
-
-[merge]
-    tool = bc
-    prompt = false
-
-[mergetool "bc"]
-    path = "C:/Program Files (x86)/Beyond Compare 4/BComp.exe"
-
+  singleKey = true
 [push]
-    default = simple
-
+  default = simple
 [alias]
 
   # Aliases are generally sorted in groups, but they could probably be sorted
@@ -74,22 +37,16 @@
   merges = !git lol --merges
   one = !git show --name-only $1
 
-  devdiff = !sh -c 'git diff --name-only | grep -v '^dist/' | xargs git diff --' -
-  devadd = !sh -c 'git add -p $(git diff --name-only | grep -v '^dist/' | xargs echo)' -
-  devgrep = !sh -c 'git grep $1 | grep -v '^dist/'' - # TODO: Find a way to get colouring still.
-
   # Deletes a branch both locally AND remotely.
   delbranch = !sh -c 'git branch -d $1 && git push origin --delete refs/heads/$1' -
 
   # Creates a new branch off the current HEAD, and sets the upstream to the same name.
   newbranch = !sh -c 'git checkout -b $1 && git push -u origin $1' -
 
-  # Gets merged branches, skips any branches we know we always want to keep
-  # (including the current one), trims whitespace, and then deletes the branches
-  # locally and remotely. Note the excluded branches includes specific named
-  # branches for the current dev team at Chromatix.
-  # TODO: Might want to checkout master first?
-  delmerged = "!f(){ git branch --merged | awk '{$1=$1};1' | egrep -v \"(^\\*)|(^(master|staging|hotfixes|nightly|testing|julian|tim|tong|dan|david|dave)$)\" | sed 's,.,git delbranch \\0,e'; }; f"
+  # Gets merged branches, skips any branches we know we always want to keep (including the current
+  # one), trims whitespace, and then deletes the branches locally and remotely. Note the excluded
+  # branches includes specific named branches for the current dev team at Chromatix.
+  delmerged = "!f(){ git branch --merged | awk '{$1=$1};1' | egrep -v \"(^\\*)|(^(master|staging|hotfixes|tim|julian|david|dave|tong|dan)$)\" | sed 's,.,git delbranch \\0,e'; }; f"
 
   uncommit = reset --soft HEAD~
   unstage = !echo && git reset HEAD && echo && git status
@@ -110,29 +67,23 @@
   # @see https://stackoverflow.com/a/14994923/1982136
   allbranches = "!f() { git branch -r | grep -v '\\->' | while read remote; do git branch --track ${remote#origin/} $remote; done; }; f"
 
-  # Quick 'continuous integration':
-  #
-  # - Run as 'git ci' to merge the current branch into master and update
-  #   everything.
-  # - Run as 'git ci branch' to merge the current branch into 'branch' and
-  #   update everything.
-  # - Run as 'git ci branch tag' to merge the current branch into 'branch' AND
-  #   tag with 'tag' and update everything.
-  #
+  # Quick 'continuous integration'
+  # - Run as 'git ci' to merge the current branch into master and update everything
+  # - Run as 'git ci branch' to merge the current branch into 'branch' and update everything
+  # - Run as 'git ci branch tag' to merge current branch into 'branch' + tag with 'tag' + update
   # Examples:
   # - git ci               # Merge a current branch eg. tim into master.
   # - git ci tim           # Merge a current eg. feature branch into tim.
-  # - git ci master v0.2.2 # Merge a current branch eg. tim into master and tag.
+  # - git ci master v0.2.2 # Merge a current branch eg. tim into master and tag it v0.2.2.
   ci = !sh -c 'git ci2 ${1+} "${1-master}" $(git current-branch) $2' -
   ci2 = !echo && sh -c 'git checkout $1 && git merge --no-ff --no-edit --log $2 && "${3+git tag}" "${3-}" && git checkout $2 && git merge $1 && git update' -
   current-branch = rev-parse --abbrev-ref HEAD
 
-  # Does a quick no-ff merge (with a few other options) from the current branch
-  # into the master (or specified) branch. Like git ci above, but doesn't merge
-  # back, doesn't update, and leaves you on the target branch ready to continue.
+  # Does a quick no-ff merge (with a few other options) from the current branch into the master (or
+  # specified) branch. Like git ci above, but doesn't merge back, doesn't update, and leaves you on
+  # the target branch ready to continue.
   noff = !sh -c 'git noff2 ${1+} "${1-master}" $(git current-branch) $2' -
   noff2 = !echo && sh -c 'git checkout $1 && git merge --no-ff --no-edit --log $2' -
-
   todo = grep -i "todo"
   branches = branch -vv
 
