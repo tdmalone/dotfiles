@@ -4,10 +4,10 @@
   To generate run `apt list --installed | grep -v 'Listing...' > apt.txt`
 
 * **Chocolatey**<br />
-  Coming soon.
+  Coming soon<br />
   To generate run `choco list --local-only > choco.txt`
 
-* **[Composer](composer.txt)**<br />
+* **[Composer](composer.json)**<br />
   Automatically managed via symlink<br />
   To generate manually run `composer global show > composer.txt`
 
