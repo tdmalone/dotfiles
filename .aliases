@@ -1,6 +1,15 @@
 
 # Shell aliases.
 
+# Make sudo work with aliases.
+# @see https://askubuntu.com/a/22043/421637
+alias sudo="sudo "
+
+# Cloud9 specific aliases.
+alias code='c9 open'
+alias open='c9 open'
+alias al='c9 open ~/.aliases'
+
 # Some quick ls aliases.
 alias ll='ls -alF'
 alias la='ls -A'
@@ -8,9 +17,11 @@ alias l='ls -CF'
 
 # Laziness.
 alias e="exit"
+alias u="source ~/.zshrc && echo zsh configuration reloaded"
 
-# Remove any Dropbox conflicted files deep down from the current location.
-alias dbconflict="find . -name *\\ conflicted\\ copy\\ 20* -type f -print0 | xargs -0 --no-run-if-empty rm --verbose"
+# Python
+alias pip="pip3"
+alias python="python3"
 
 # Git shortcuts.
 # Git aliases themselves should be defined in .gitconfig.
@@ -52,6 +63,8 @@ alias bfg="java -jar ~/bfg.jar"
 
 # Yarn shortcuts.
 alias y="yarn"
+alias ye="yarn execute"
+alias yf="yarn fix"
 alias yl="yarn lint"
 alias yp="yarn publish"
 alias yt="yarn test"
@@ -82,13 +95,10 @@ alias lf="lfj && lfs && lfp"
 # TODO: See more at https://github.com/tcnksm/docker-alias/blob/master/zshrc
 
 # Build in the current directory.
-alias dbuild="docker build -t \$(basename \$(pwd)) \$(pwd)" # *nix version.
-#alias dbuild="docker build -t $(basename $(pwd)) $(pwd)"   # Windows version.
+alias dbuild="docker build -t \$(basename \$(pwd)) \$(pwd)"
 
 # Run bash in a Docker container, assuming the container is named (your current basename)Instance.
-# NOTE: On Windows, arrow keys and tab completion will not work with winpty, so you might want to move to cmd for this instead. See doskeys for a similar macro. Then you can run 'start' from mingw (Git Bash) then then 'dbash' from the cmd that opens up.
-alias dbash="docker start \$(basename \$(pwd))Instance && docker exec -it \$(basename \$(pwd))Instance bash"      # *nix version.
-#alias dbash="docker start $(basename $(pwd))Instance && winpty docker exec -it $(basename $(pwd))Instance bash"  # Windows version.
+alias dbash="docker start \$(basename \$(pwd))Instance && docker exec -it \$(basename \$(pwd))Instance bash"
 
 # Stop and remove ALL Docker containers.
 alias drmc="echo && echo 'Removing all Docker containers...' && echo && docker ps -a | awk '{print \$1}' | grep -v CONTAINER | xargs -r docker stop | xargs -r docker rm"
@@ -105,17 +115,6 @@ alias dstart="docker start \$(basename \$(pwd))Instance"
 alias datt="docker attach \$(basename \$(pwd))Instance" # Reattach a terminal & stdin.
 alias drs="docker restart \$(basename \$(pwd))Instance"
 alias drm="dstop && docker rm \$(basename \$(pwd))Instance"
-
-# Windows versions.
-#alias drunv="docker run -d -p 8080:80 -p 8081:443 -v '$(cygpath -w $(pwd))'/src:/var/www/html/src --name $(basename $(pwd))Instance $(basename $(pwd))"
-#alias drun="docker run -d -p 8080:80 -p 8081:443 --name $(basename $(pwd))Instance $(basename $(pwd))"
-#alias dlog="docker logs $(basename $(pwd))Instance"
-#alias dstop="docker stop $(basename $(pwd))Instance"
-#alias dstart="docker start $(basename $(pwd))Instance"
-#alias datt="docker attach $(basename $(pwd))Instance" # Reattach a terminal & stdin.
-#alias drs="docker restart $(basename $(pwd))Instance"
-#alias drm="dstop && docker rm $(basename $(pwd))Instance"
-
 alias dps="docker ps -a"
 alias di="docker images"
 
@@ -123,8 +122,7 @@ alias di="docker images"
 
 # Enter a failed build container at the point it failed.
 # TODO: This doesn't run the final command yet due to xargs not coming from a tty.
-alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: docker run -it % bash -il"          # *nix version.
-#alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: winpty docker run -it % bash -il"  # Windows version.
+alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: docker run -it % bash -il"
 
 # Test a Lambda function in the current directory.
 alias lambda="docker run --rm -v \$(pwd):/var/task lambci/lambda index.handler"
