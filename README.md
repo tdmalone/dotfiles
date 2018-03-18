@@ -2,7 +2,7 @@
 
 My [dotfiles](https://dotfiles.github.io/). Includes public keys.
 
-Currenty manually managed.
+Currenty a mix between manual and automatic management (via symlinks).
 
 Use for whatever you like, and at your own risk! Issues welcome.
 
