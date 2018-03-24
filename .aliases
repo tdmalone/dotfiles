@@ -1,6 +1,9 @@
 
 # Shell aliases.
 
+alias hadolint='docker run --rm -i hadolint/hadolint < Dockerfile'
+alias hl='hadolint'
+
 # Make sudo work with aliases.
 # @see https://askubuntu.com/a/22043/421637
 alias sudo="sudo "
