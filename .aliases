@@ -6,7 +6,7 @@ alias hl='hadolint'
 
 # Make sudo work with aliases.
 # @see https://askubuntu.com/a/22043/421637
-alias sudo="sudo "
+#alias sudo="sudo "
 
 # Cloud9 specific aliases.
 alias code='c9 open'
@@ -71,7 +71,7 @@ alias yf="yarn fix"
 alias yl="yarn lint"
 alias yp="yarn publish"
 alias yt="yarn test"
-alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
+#alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
 
 # Composer shortcuts.
 alias c="composer"
