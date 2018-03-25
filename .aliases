@@ -1,33 +1,34 @@
 
 # Shell aliases.
 
-alias hadolint='docker run --rm -i hadolint/hadolint < Dockerfile'
-alias hl='hadolint'
-
 # Make sudo work with aliases.
 # @see https://askubuntu.com/a/22043/421637
 #alias sudo="sudo "
-
-# Cloud9 specific aliases.
-alias code='c9 open'
-alias open='c9 open'
-alias al='c9 open ~/.aliases'
 
 # Some quick ls aliases.
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# Laziness.
+# Laziness ;).
 alias e="exit"
 alias u="source ~/.zshrc && echo zsh configuration reloaded"
+alias al='c9 open ~/.aliases'
+alias en='c9 open ~/.env'
+alias alv='vi ~/.aliases'
 
-# Python
+# Cloud9.
+alias code='c9 open'
+alias open='c9 open'
+
+# Python.
 alias pip="pip3"
 alias python="python3"
+alias pl="pylint lambda_function.py | less"
+alias py="pl"
 
-# Git shortcuts.
-# Git aliases themselves should be defined in .gitconfig.
+# Git.
+# Note that git aliases themselves should be defined in .gitconfig.
 alias ga="git add"
 alias gaa="git add ."
 alias gam="git amend"
@@ -64,8 +65,9 @@ alias gt="git tag"
 alias gu="git update"
 alias bfg="java -jar ~/bfg.jar"
 
-# Yarn shortcuts.
+# Yarn.
 alias y="yarn"
+alias yb="yarn build"
 alias ye="yarn execute"
 alias yf="yarn fix"
 alias yl="yarn lint"
@@ -73,25 +75,39 @@ alias yp="yarn publish"
 alias yt="yarn test"
 #alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
 
-# Composer shortcuts.
+# Composer.
 alias c="composer"
 alias cl="composer lint"
 alias ct="composer test"
 
-# Webpack shortcuts.
+# Webpack.
 alias webpack="yarn webpack"
 alias yw="yarn webpack"
 
-# Make shortcuts.
+# Make.
 alias ml="make lint"
 alias mt="make test"
 
-# Other shortcuts.
-alias pl="pylint lambda_function.py | less"
-alias py="pl"
+# Travis CI CLI.
 alias tm="travis monitor"
 
-# Gulp & Slush shortcuts.
+# Pantheon terminus CLI.
+alias terminus=~/vendor/bin/terminus
+
+# Ansible/Packer/Terraform/Vagrant.
+alias an='ansible'
+alias pk='packer'
+alias t='terraform'
+alias tf='terraform'
+alias vg='vagrant'
+alias tfa='tf apply'
+alias ta='tf apply'
+alias tfi='tf init'
+alias ti='tf init'
+alias tfp='tf plan'
+alias tp='tf plan'
+
+# Gulp & Slush.
 alias cwp="slush chromatix-wp"
 alias cwpu="slush chromatix-wp-undo"
 alias scwp="slush chromatix-wp"
@@ -105,14 +121,14 @@ alias gls="gulp lint:sass"
 alias gre="gulp release"
 alias gv="gulp version"
 
-# Lint fix shortcuts.
+# Lint fixing.
 alias lfj="git ls-tree -r HEAD | grep \"\\.js$\" | awk '{print \$4}' | xargs node_modules/.bin/eslint --ignore-pattern '!.*.js' --fix"
 alias lfs="git ls-tree -r HEAD | grep \"\\.scss$\" | awk '{print \$4}' | xargs node_modules/.bin/stylelint --fix"
 alias lfp="git ls-tree -r HEAD | grep \"\\.php$\" | awk '{print \$4}' | xargs vendor/bin/phpcbf"
 alias lf="lfj && lfs && lfp"
 
-# Docker shortcuts.
-# TESTED IN GIT BASH ONLY.
+# Docker.
+# WARNING: Some of these have only been tested in Git Bash on Windows.
 # TODO: See more at https://github.com/tcnksm/docker-alias/blob/master/zshrc
 
 # Build in the current directory.
@@ -127,7 +143,6 @@ alias drmc="echo && echo 'Removing all Docker containers...' && echo && docker p
 # Remove ALL Docker images.
 alias drmi="echo && echo 'Removing all Docker images...' && echo && docker images | awk '{print \$3}' | grep -v IMAGE | xargs -r docker rmi"
 
-# *nix versions.
 alias drunv="docker run -d -p 8080:80 -p 8081:443 -v '\$(pwd)'/src:/var/www/html/src --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
 alias drun="docker run -d -p 8080:80 -p 8081:443 --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
 alias dlog="docker logs \$(basename \$(pwd))Instance"
@@ -148,5 +163,6 @@ alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker c
 # Test a Lambda function in the current directory.
 alias lambda="docker run --rm -v \$(pwd):/var/task lambci/lambda index.handler"
 
-# Pantheon terminus CLI.
-alias terminus=~/vendor/bin/terminus
+# Hadolint for Dockerfiles.
+alias hadolint='docker run --rm -i hadolint/hadolint < Dockerfile'
+alias hl='hadolint'
