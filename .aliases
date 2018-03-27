@@ -16,6 +16,7 @@ alias u="source ~/.zshrc && echo zsh configuration reloaded"
 alias al='c9 open ~/.aliases'
 alias en='c9 open ~/.env'
 alias alv='vi ~/.aliases'
+alias ex='export'
 
 # Cloud9.
 alias code='c9 open'
@@ -89,7 +90,9 @@ alias ml="make lint"
 alias mt="make test"
 
 # Travis CI CLI.
+# See also: sensitive aliases in .env for encrypting common values.
 alias tm="travis monitor"
+alias te="travis encrypt"
 
 # Pantheon terminus CLI.
 alias terminus=~/vendor/bin/terminus
@@ -97,6 +100,7 @@ alias terminus=~/vendor/bin/terminus
 # Ansible/Packer/Terraform/Vagrant.
 alias an='ansible'
 alias pk='packer'
+alias pv='pk validate'
 alias t='terraform'
 alias tf='terraform'
 alias vg='vagrant'
@@ -106,6 +110,8 @@ alias tfi='tf init'
 alias ti='tf init'
 alias tfp='tf plan'
 alias tp='tf plan'
+alias tv='tf validate'
+alias tu='tf force-unlock -force'
 
 # Gulp & Slush.
 alias cwp="slush chromatix-wp"
