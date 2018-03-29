@@ -5,6 +5,9 @@
     "aws": {
         "@awsRegion": "ap-southeast-2"
     },
+    "build": {
+        "@saveall": true
+    },
     "format": {
         "jsbeautify": {
             "@indent_inner_html": true,
