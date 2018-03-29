@@ -17,6 +17,7 @@ alias al='c9 open ~/.aliases'
 alias en='c9 open ~/.env'
 alias alv='vi ~/.aliases'
 alias ex='export'
+alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
 
 # Cloud9.
 alias code='c9 open'
@@ -100,7 +101,9 @@ alias terminus=~/vendor/bin/terminus
 # Ansible/Packer/Terraform/Vagrant.
 alias an='ansible'
 alias pk='packer'
-alias pv='pk validate'
+alias pb='pk build'
+alias pv="find *.packer.json | xargs -I % sh -c 'echo % && packer validate %'"
+alias pkv='pv'
 alias t='terraform'
 alias tf='terraform'
 alias vg='vagrant'
