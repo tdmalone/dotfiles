@@ -5,6 +5,8 @@
 # @see https://askubuntu.com/a/22043/421637
 #alias sudo="sudo "
 
+alias dda='sudo datadog-agent'
+
 # Some quick ls aliases.
 alias ll='ls -alF'
 alias la='ls -A'
@@ -92,29 +94,43 @@ alias mt="make test"
 
 # Travis CI CLI.
 # See also: sensitive aliases in .env for encrypting common values.
-alias tm="travis monitor"
-alias te="travis encrypt"
+alias tm='travis monitor'
+alias te='travis encrypt'
 
-# Pantheon terminus CLI.
-alias terminus=~/vendor/bin/terminus
+# Pantheon Terminus CLI.
+alias terminus="~/vendor/bin/terminus"
 
-# Ansible/Packer/Terraform/Vagrant.
+# Ansible.
 alias an='ansible'
+alias ap='ansible-playbook --diff'
+alias apb='ap'
+alias book='book'
+alias ag='ansible-galaxy'
+alias agi='ag install'
+
+# Packer.
 alias pk='packer'
 alias pb='pk build'
 alias pv="find *.packer.json | xargs -I % sh -c 'echo % && packer validate %'"
 alias pkv='pv'
+
+# Terraform.
 alias t='terraform'
 alias tf='terraform'
-alias vg='vagrant'
 alias tfa='tf apply'
 alias ta='tf apply'
 alias tfi='tf init'
+alias tfin='tf init'
+alias tfim='tf import'
 alias ti='tf init'
+alias tin='tf init'
 alias tfp='tf plan'
 alias tp='tf plan'
 alias tv='tf validate'
 alias tu='tf force-unlock -force'
+
+# Vagrant.
+alias vg='vagrant'
 
 # Gulp & Slush.
 alias cwp="slush chromatix-wp"
