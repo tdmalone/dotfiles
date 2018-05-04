@@ -6,6 +6,7 @@
 #alias sudo="sudo "
 
 alias dda='sudo datadog-agent'
+alias disk='sudo du -d1 -hx | sort -rh'
 
 # Some quick ls aliases.
 alias ll='ls -alF'
