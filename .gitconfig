@@ -117,5 +117,5 @@
   releases = !start chrome $(sed 's,\\.git,/releases,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
   hub = !start chrome $(sed 's,\\.git,/,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
 
-  chrclone = !sh -c 'git clone git@github.com:ChromatixAU/'"${1}"'.git'
   tdmclone = !sh -c 'git clone git@github.com:tdmalone/'"${1}"'.git'
+  apclone = !sh -c 'git clone git@bitbucket.org:astutepayroll/'"${1}"'.git'
