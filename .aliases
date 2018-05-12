@@ -16,15 +16,12 @@ alias l='ll'
 # Laziness ;).
 alias e="exit"
 alias u="source ~/.zshrc && echo zsh configuration reloaded"
-alias al='c9 open ~/.aliases'
-alias en='c9 open ~/.env'
-alias alv='vi ~/.aliases'
+alias al='open ~/.aliases'
+alias en='open ~/.env'
+alias alvi='vi ~/.aliases'
+alias envi='vi ~/.env'
 alias ex='export'
 alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
-
-# Cloud9.
-alias code='c9 open'
-alias open='c9 open'
 
 # Python.
 alias pip="pip3"
