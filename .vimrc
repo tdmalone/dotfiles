@@ -1,6 +1,9 @@
 
 " @see http://www.guckes.net/vim/setup.htm
 
+" Turns syntax highlighting on.
+syntax on
+
 " Enables lots of features, according to the above link.
 set nocp
 
