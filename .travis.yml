@@ -1,0 +1,6 @@
+language: generic
+install: true
+
+script:
+  - shellcheck .aliases
+  - shellcheck .zshrc
