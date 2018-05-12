@@ -7,11 +7,11 @@
 
 alias dda='sudo datadog-agent'
 alias disk='sudo du -d1 -hx | sort -rh'
+alias conn='ping 61.88.88.88'
 
 # Some quick ls aliases.
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias ll='ls -alFA'
+alias l='ll'
 
 # Laziness ;).
 alias e="exit"
@@ -132,6 +132,9 @@ alias tu='tf force-unlock -force'
 
 # Vagrant.
 alias vg='vagrant'
+alias vgu='vg up'
+alias vgup='vg up --provision'
+alias vgd='vg destroy'
 
 # Gulp & Slush.
 alias cwp="slush chromatix-wp"
