@@ -8,6 +8,7 @@
 alias dda='sudo datadog-agent'
 alias disk='sudo du -d1 -hx | sort -rh'
 alias conn='ping 61.88.88.88'
+alias pt='papertrail'
 
 # Some quick ls aliases.
 alias ll='ls -alFA'

@@ -94,9 +94,13 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>269 126 606 469 0 0 1440 877 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>385 283 1018 447 0 0 1440 877 </string>
+	<string>385 402 796 473 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>67 1 1372 876 0 0 1440 877 </string>
+	<string>64 0 1376 877 0 0 1440 877 </string>
+	<key>NeverWarnAboutShortLivedSessions_4CF79045-48D6-40E4-A8F7-7FBA282C8A47</key>
+	<true/>
+	<key>NeverWarnAboutShortLivedSessions_4CF79045-48D6-40E4-A8F7-7FBA282C8A47_selection</key>
+	<integer>0</integer>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -142,12 +146,16 @@
 			</dict>
 			<key>Ansi 10 Color</key>
 			<dict>
-				<key>Blue Component</key>
-				<real>0.3333333432674408</real>
-				<key>Green Component</key>
+				<key>Alpha Component</key>
 				<real>1</real>
+				<key>Blue Component</key>
+				<real>0.41794719504486011</real>
+				<key>Color Space</key>
+				<string>sRGB</string>
+				<key>Green Component</key>
+				<real>0.721832275390625</real>
 				<key>Red Component</key>
-				<real>0.3333333432674408</real>
+				<real>0.40108524030074477</real>
 			</dict>
 			<key>Ansi 11 Color</key>
 			<dict>
@@ -208,38 +216,42 @@
 			</dict>
 			<key>Ansi 2 Color</key>
 			<dict>
+				<key>Alpha Component</key>
+				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.0</real>
+				<real>0.17647058823529413</real>
+				<key>Color Space</key>
+				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.73333334922790527</real>
+				<real>0.59215686274509804</real>
 				<key>Red Component</key>
-				<real>0.0</real>
+				<real>0.38039215686274508</real>
 			</dict>
 			<key>Ansi 3 Color</key>
 			<dict>
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.0955090606585145</real>
+				<real>0.20784313725490197</real>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.77827341404593797</real>
+				<real>0.62745098039215685</real>
 				<key>Red Component</key>
-				<real>0.78802490234375</real>
+				<real>0.74901960784313726</real>
 			</dict>
 			<key>Ansi 4 Color</key>
 			<dict>
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.893310546875</real>
+				<real>0.62352941176470589</real>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.60619732289630546</real>
+				<real>0.396078431372549</real>
 				<key>Red Component</key>
-				<real>0.54477003961801529</real>
+				<real>0.24705882352941178</real>
 			</dict>
 			<key>Ansi 5 Color</key>
 			<dict>
@@ -301,13 +313,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.96631464598158345</real>
+				<real>0.96470588235294119</real>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.966552734375</real>
+				<real>0.94117647058823528</real>
 				<key>Red Component</key>
-				<real>0.95257122814655304</real>
+				<real>0.92156862745098034</real>
 			</dict>
 			<key>Background Image Is Tiled</key>
 			<false/>
@@ -758,7 +770,7 @@
 			<key>Thin Strokes</key>
 			<integer>4</integer>
 			<key>Transparency</key>
-			<real>0.69259597081218272</real>
+			<real>0.15365244289340102</real>
 			<key>Triggers</key>
 			<array/>
 			<key>Unlimited Scrollback</key>
@@ -781,12 +793,18 @@
 			<string>/Users/tim</string>
 		</dict>
 	</array>
+	<key>NoSyncCommandHistoryHasEverBeenUsed</key>
+	<true/>
 	<key>NoSyncHaveWarnedAboutPasteConfirmationChange</key>
 	<true/>
+	<key>NoSyncInstallUtilitiesPackage</key>
+	<true/>
+	<key>NoSyncInstallUtilitiesPackage_selection</key>
+	<integer>0</integer>
 	<key>NoSyncInstallationId</key>
 	<string>0A33FC38-008C-461F-B7D6-6EFB4FBC939E</string>
 	<key>NoSyncLastTipTime</key>
-	<real>547784553.78647101</real>
+	<real>547884117.00069904</real>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -798,6 +816,7 @@
 	<key>NoSyncTipsToNotShow</key>
 	<array>
 		<string>000</string>
+		<string>0000</string>
 	</array>
 	<key>OpenArrangementAtStartup</key>
 	<false/>
@@ -849,7 +868,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2018-05-12T02:22:48Z</date>
+	<date>2018-05-13T06:01:57Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>ShowBookmarkName</key>
