@@ -131,7 +131,10 @@ alias tu='tf force-unlock -force'
 # Vagrant.
 alias vg='vagrant'
 alias vgu='vg up'
-alias vgup='vg up --provision'
+alias vgup='vg up'
+alias vgupp='vg up --provision'
+alias vgs='vg suspend'
+alias vgdown='vg suspend'
 alias vgd='vg destroy'
 
 # Gulp & Slush.
