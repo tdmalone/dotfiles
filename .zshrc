@@ -1,3 +1,10 @@
+# shellcheck shell=bash
+# shellcheck disable=SC1090 disable=SC1091 disable=SC2034
+
+# Disabled directives:
+# https://github.com/koalaman/shellcheck/wiki/SC1090 - we source scripts not in this repo
+# https://github.com/koalaman/shellcheck/wiki/SC1091 - we source scripts not in this repo
+# https://github.com/koalaman/shellcheck/wiki/SC2034 - not all these settings need exporting
 
 # Ensure tmux (and by extension, Cloud9), works ok with colours.
 export TERM="xterm-256color"
@@ -31,10 +38,16 @@ source "${HOME}/.aliases"
 
 # Settings added by other packages follow. Usually for shell completion.
 
+# Initialise bash completions.
+# @see https://stackoverflow.com/a/27853970/1982136
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/vault vault
 
-[ -f /Users/tim/.travis/travis.sh ] && source /Users/tim/.travis/travis.sh
-
+# iTerm2.
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# Travis CI CLI.
+[ -f /home/tim/.travis/travis.sh ] && source /home/tim/.travis/travis.sh
+[ -f /Users/tim/.travis/travis.sh ] && source /Users/tim/.travis/travis.sh
+
+# Vault.
+complete -o nospace -C /usr/local/bin/vault vault
