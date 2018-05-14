@@ -4,3 +4,12 @@ install: true
 script:
   - shellcheck .aliases
   - shellcheck .zshrc
+
+notifications:
+  email: false
+  webhooks:
+    urls: https://api.tm.id.au/v2/travis/jobStatus
+  slack:
+    on_start: always
+    rooms:
+      - secure: DuldNn9pd8fAwD8aU4Q6nIOO6FszETwpPdIeaO8EbXK3RI80Jezfy22r+dk+2GTt9fft0h7k/dkOw20u0aqJxnySyzjssqoFe3L1ksLRh4xR454016G/IXcBfU9FmqCp3wZgCO8bVOPfQKkbVolYIXKfBAjjLChivOJabno7DlSa9+vSttES4drPILJK/xJnPueiceCa6OartmruYawXjoTwDJKuVUcBHnISYRvMQ/Q1ZSZJZNrBaNybhH9YkGMJNAgey/jnFdEME8U21AxDFVMZz+T6TDrDHpuZfaAauX1njiw7MEL+TPQktBZ4V517pbPovHI45I3CsxEPA3LuPbp1UXJxyirEtdQKtISjo38sHyDoI4p1iOkVK24xdWvfV/k8N3yfTANwoPREoAKm1wI5oO2qfcWn30uf8qKOZK/0218yYXhX3Rn7ovxt4tvUSSkZjgZn/eNvDou65XsYzAZTmM4k7urwQHdqvl6+r+/rag6EuNwoOO7GGeaxL/pZ9fW/RvIxHVRoH2+pxWgQ7idWhONpEXvyf26aOeY+maVW6zPEEqqdzgGiFYT5KOdOFtgdfm/mZtzeuZB6lHkW1sD8IhXnCQso0nHiptcqBVIhakYx9Aw1niLZuz3DkSzawN7NYdmqj0JlRvSW64MWzffsAbEQyncKDyk4O1CzOS4=
