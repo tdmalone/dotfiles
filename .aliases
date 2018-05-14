@@ -1,165 +1,74 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2142
 
-# Shell aliases.
+# Disabled directives:
+# https://github.com/koalaman/shellcheck/wiki/SC2142 - positional params are quoted
 
-# Make sudo work with aliases.
+# Make sudo work with aliases. May not work properly though...
 # @see https://askubuntu.com/a/22043/421637
 #alias sudo="sudo "
 
-alias dda='sudo datadog-agent'
-alias disk='sudo du -d1 -hx | sort -rh'
-alias conn='ping 61.88.88.88'
-alias pt='papertrail'
-
-# Some quick ls aliases.
-alias ll='ls -alFA'
-alias l='ll'
+##########################
+# Assorted aliases
+##########################
 
 # Laziness ;).
+alias conn='ping 61.88.88.88'
+alias disk='sudo du -d1 -hx | sort -rh'
 alias e="exit"
-alias u="source ~/.zshrc && echo zsh configuration reloaded"
-alias al='open ~/.aliases'
-alias en='open ~/.env'
-alias alvi='vi ~/.aliases'
-alias envi='vi ~/.env'
 alias ex='export'
+alias ll='ls -alFA'
+alias l='ll'
 alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
+alias u="source ~/.zshrc && echo zsh configuration reloaded"
 
-# Python.
-alias pip="pip3"
-alias python="python3"
-alias pl="pylint lambda_function.py | less"
-alias py="pl"
+# Quick file opens.
+# The 'open' command is defined as an alias in .env on each system, eg. to 'code' or 'c9 open'.
+alias al='open ~/.aliases'
+alias alvi='vi ~/.aliases'
+alias en='open ~/.env'
+alias envi='vi ~/.env'
 
-# Git.
-# Note that git aliases themselves should be defined in .gitconfig.
-alias ga="git add"
-alias gaa="git add ."
-alias gam="git amend"
-alias gap="git add -p"
-alias gb="git branch"
-alias gba="gbash"
-alias gbash="echo && echo 'Opening git bash in a new Window. Press Ctrl+C in that Window to start using it.' && c:/progra~1/git/git-bash.exe &"
-alias gc="git commit"
-alias gcam="git commit -am"
-alias gce="git commit --allow-empty -m 'Empty commit for testing'"
-alias gcm="git commit -m"
-alias gcmvb="git commit -m \"Version bump\" && gt"
-alias gcmvbc="git commit -m \"Version bump; changelog\" && gt"
-alias gco="git checkout"
-alias gcob="git checkout -b"
-alias gcom="git checkout master"
-alias gd="git diff"
-alias gdb="git delbranch"
-alias gdc="git diff --cached"
-alias gf="git fix"
-alias gg="git grep -i"
-alias gh="git hub"
-alias gl="git latest"
-alias gm="git merge"
-alias gn="git noff"
-alias gnb="git newbranch"
-alias gp="git push"
-alias gpl="git pull"
-alias gpuo="git push -u origin"
-alias gr="git remote -vv"
-alias grso="git remote set-url origin"
-alias gs="git status"
-alias gt="git tag"
-alias gu="git update"
-alias bfg="java -jar ~/bfg.jar"
+##########################
+# Lint fixing
+##########################
 
-# Yarn.
-alias y="yarn"
-alias yb="yarn build"
-alias ye="yarn execute"
-alias yf="yarn fix"
-alias yl="yarn lint"
-alias yp="yarn publish"
-alias yt="yarn test"
-#alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
+alias lf="lfj && lfs && lfp"
+alias lfj="git ls-tree -r HEAD | grep \"\\.js$\" | awk '{print \$4}' | xargs node_modules/.bin/eslint --ignore-pattern '!.*.js' --fix"
+alias lfs="git ls-tree -r HEAD | grep \"\\.scss$\" | awk '{print \$4}' | xargs node_modules/.bin/stylelint --fix"
+alias lfp="git ls-tree -r HEAD | grep \"\\.php$\" | awk '{print \$4}' | xargs vendor/bin/phpcbf"
 
-# Composer.
+##########################
+# Ansible
+##########################
+
+alias an='ansible'
+
+alias ag='ansible-galaxy'
+alias agi='ag install'
+
+alias ap='ansible-playbook --diff'
+alias apb='ap'
+alias book='ap'
+
+##########################
+# Composer
+##########################
+
 alias c="composer"
 alias cl="composer lint"
 alias ct="composer test"
 
-# Webpack.
-alias webpack="yarn webpack"
-alias yw="yarn webpack"
+##########################
+# Datadog
+##########################
 
-# Make.
-alias ml="make lint"
-alias mt="make test"
+alias dda='sudo datadog-agent'
 
-# Travis CI CLI.
-# See also: sensitive aliases in .env for encrypting common values.
-alias tm='travis monitor'
-alias te='travis encrypt'
+##########################
+# Docker
+##########################
 
-# Pantheon Terminus CLI.
-alias terminus="~/vendor/bin/terminus"
-
-# Ansible.
-alias an='ansible'
-alias ap='ansible-playbook --diff'
-alias apb='ap'
-alias book='book'
-alias ag='ansible-galaxy'
-alias agi='ag install'
-
-# Packer.
-alias pk='packer'
-alias pb='pk build'
-alias pv="find *.packer.json | xargs -I % sh -c 'echo % && packer validate %'"
-alias pkv='pv'
-
-# Terraform.
-alias t='terraform'
-alias tf='terraform'
-alias tfa='tf apply'
-alias ta='tf apply'
-alias tfi='tf init'
-alias tfin='tf init'
-alias tfim='tf import'
-alias ti='tf init'
-alias tin='tf init'
-alias tfp='tf plan'
-alias tp='tf plan'
-alias tv='tf validate'
-alias tu='tf force-unlock -force'
-
-# Vagrant.
-alias vg='vagrant'
-alias vgu='vg up'
-alias vgup='vg up'
-alias vgupp='vg up --provision'
-alias vgs='vg suspend'
-alias vgdown='vg suspend'
-alias vgd='vg destroy'
-alias vggs='vg global-status'
-alias vgr='vg reload'
-
-# Gulp & Slush.
-alias cwp="slush chromatix-wp"
-alias cwpu="slush chromatix-wp-undo"
-alias scwp="slush chromatix-wp"
-alias scwpu="slush chromatix-wp-undo"
-alias g="gulp"
-alias glh="gulp lint:html"
-alias gli="gulp lint"
-alias glj="gulp lint:js"
-alias glp="gulp lint:php"
-alias gls="gulp lint:sass"
-alias gre="gulp release"
-alias gv="gulp version"
-
-# Lint fixing.
-alias lfj="git ls-tree -r HEAD | grep \"\\.js$\" | awk '{print \$4}' | xargs node_modules/.bin/eslint --ignore-pattern '!.*.js' --fix"
-alias lfs="git ls-tree -r HEAD | grep \"\\.scss$\" | awk '{print \$4}' | xargs node_modules/.bin/stylelint --fix"
-alias lfp="git ls-tree -r HEAD | grep \"\\.php$\" | awk '{print \$4}' | xargs vendor/bin/phpcbf"
-alias lf="lfj && lfs && lfp"
-
-# Docker.
 # WARNING: Some of these have only been tested in Git Bash on Windows.
 # TODO: See more at https://github.com/tcnksm/docker-alias/blob/master/zshrc
 
@@ -175,6 +84,7 @@ alias drmc="echo && echo 'Removing all Docker containers...' && echo && docker p
 # Remove ALL Docker images.
 alias drmi="echo && echo 'Removing all Docker images...' && echo && docker images | awk '{print \$3}' | grep -v IMAGE | xargs -r docker rmi"
 
+# Assorted Docker aliases.
 alias drunv="docker run -d -p 8080:80 -p 8081:443 -v '\$(pwd)'/src:/var/www/html/src --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
 alias drun="docker run -d -p 8080:80 -p 8081:443 --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
 alias dlog="docker logs \$(basename \$(pwd))Instance"
@@ -192,9 +102,188 @@ alias di="docker images"
 # TODO: This doesn't run the final command yet due to xargs not coming from a tty.
 alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: docker run -it % bash -il"
 
-# Test a Lambda function in the current directory.
+# Test a Lambda function in the current directory using LambCI's Docker images.
 alias lambda="docker run --rm -v \$(pwd):/var/task lambci/lambda index.handler"
 
-# Hadolint for Dockerfiles.
+##########################
+# Git
+##########################
+
+# Note that git aliases themselves should be defined in .gitconfig.
+
+alias bfg="java -jar ~/bfg.jar"
+
+alias ga="git add"
+alias gaa="git add ."
+alias gam="git amend"
+alias gap="git add -p"
+
+alias gb="git branch"
+alias gba="gbash"
+
+alias gc="git commit"
+alias gcam="git commit -am"
+alias gce="git commit --allow-empty -m 'Empty commit for testing'"
+alias gcm="git commit -m"
+alias gcmvb="git commit -m \"Version bump\" && gt"
+alias gcmvbc="git commit -m \"Version bump; changelog\" && gt"
+alias gco="git checkout"
+alias gcob="git checkout -b"
+alias gcom="git checkout master"
+
+alias gd="git diff"
+alias gdb="git delbranch"
+alias gdc="git diff --cached"
+
+alias gf="git fix"
+alias gg="git grep -i"
+alias gh="git hub"
+alias gl="git latest"
+alias gm="git merge"
+
+alias gn="git noff"
+alias gnb="git newbranch"
+
+alias gp="git push"
+alias gpl="git pull"
+alias gpuo="git push -u origin"
+
+alias gr="git remote -vv"
+alias grso="git remote set-url origin"
+
+alias gs="git status"
+alias gt="git tag"
+alias gu="git update"
+
+##########################
+# Gulp
+##########################
+
+alias g="gulp"
+
+alias glh="gulp lint:html"
+alias gli="gulp lint"
+alias glj="gulp lint:js"
+alias glp="gulp lint:php"
+alias gls="gulp lint:sass"
+
+alias gre="gulp release"
+alias gv="gulp version"
+
+##########################
+# Hadolint
+##########################
+
 alias hadolint='docker run --rm -i hadolint/hadolint < Dockerfile'
 alias hl='hadolint'
+
+##########################
+# Make
+##########################
+
+alias ml="make lint"
+alias mt="make test"
+
+##########################
+# Packer
+##########################
+
+alias pk='packer'
+alias pb='pk build'
+
+alias pv="find *.packer.json | xargs -I % sh -c 'echo % && packer validate %'"
+alias pkv='pv'
+
+##########################
+# Papertrail
+##########################
+
+alias pt='papertrail'
+
+##########################
+# Python
+##########################
+
+alias pip="pip3"
+alias python="python3"
+
+alias pl="pylint lambda_function.py | less"
+alias py="pl"
+
+##########################
+# Terminus (Pantheon CLI)
+##########################
+
+alias terminus="~/vendor/bin/terminus"
+
+##########################
+# Terraform
+##########################
+
+alias t='terraform'
+alias tf='terraform'
+
+alias ta='tf apply'
+alias tfa='tf apply'
+
+alias tfim='tf import'
+
+alias tfi='tf init'
+alias tfin='tf init'
+alias ti='tf init'
+alias tin='tf init'
+
+alias tp='tf plan'
+alias tfp='tf plan'
+
+alias tu='tf force-unlock -force'
+alias tv='tf validate'
+
+##########################
+# Travis CI CLI
+##########################
+
+# See also: sensitive aliases in .env for encrypting common values.
+
+alias te='travis encrypt'
+alias tm='travis monitor'
+
+##########################
+# Vagrant
+##########################
+
+alias vg='vagrant'
+
+alias vgu='vg up'
+alias vgup='vg up'
+alias vgupp='vg up --provision'
+
+alias vgs='vg suspend'
+alias vgdown='vg suspend'
+
+alias vgd='vg destroy'
+alias vgr='vg reload'
+
+alias vggs='vg global-status'
+
+##########################
+# Webpack
+##########################
+
+alias webpack="yarn webpack"
+alias yw="yarn webpack"
+
+##########################
+# Yarn
+##########################
+
+alias y="yarn"
+alias yb="yarn build"
+alias ye="yarn execute"
+alias yf="yarn fix"
+alias yl="yarn lint"
+alias yp="yarn publish"
+alias yt="yarn test"
+
+# This alias may no longer work.
+#alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
