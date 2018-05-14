@@ -136,6 +136,8 @@ alias vgupp='vg up --provision'
 alias vgs='vg suspend'
 alias vgdown='vg suspend'
 alias vgd='vg destroy'
+alias vggs='vg global-status'
+alias vgr='vg reload'
 
 # Gulp & Slush.
 alias cwp="slush chromatix-wp"
