@@ -20,6 +20,8 @@ alias ex='export'
 alias ll='ls -alFA'
 alias l='ll'
 alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
+alias trace="traceroute"
+alias tracert="traceroute"
 alias u="source ~/.zshrc && echo zsh configuration reloaded"
 
 # Quick file opens.
