@@ -9,11 +9,18 @@
 #alias sudo="sudo "
 
 ##########################
+# New, unsorted aliases
+##########################
+
+# ........
+
+##########################
 # Assorted aliases
 ##########################
 
 # Laziness ;).
 alias conn='ping 61.88.88.88'
+alias cls='clear'
 alias disk='sudo du -d1 -hx | sort -rh'
 alias e="exit"
 alias ex='export'
@@ -30,6 +37,10 @@ alias al='open ~/.aliases'
 alias alvi='vi ~/.aliases'
 alias en='open ~/.env'
 alias envi='vi ~/.env'
+
+# Other stuff.
+alias art='php artisan'
+alias flushdns='sudo killall -HUP mDNSResponder' # Only useful on Macs.
 
 ##########################
 # Lint fixing
