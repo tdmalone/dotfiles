@@ -6,13 +6,13 @@
 
 # Make sudo work with aliases. May not work properly though...
 # @see https://askubuntu.com/a/22043/421637
-#alias sudo="sudo "
+#alias sudo='sudo '
 
 ##########################
 # New, unsorted aliases
 ##########################
 
-# ........
+# ...
 
 ##########################
 # Assorted aliases
@@ -22,14 +22,14 @@
 alias conn='ping 61.88.88.88'
 alias cls='clear'
 alias disk='sudo du -d1 -hx | sort -rh'
-alias e="exit"
+alias e='exit'
 alias ex='export'
 alias ll='ls -alFA'
 alias l='ll'
 alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
-alias trace="traceroute"
-alias tracert="traceroute"
-alias u="source ~/.zshrc && echo zsh configuration reloaded"
+alias trace='traceroute'
+alias tracert='traceroute'
+alias u='source ~/.zshrc && echo zsh configuration reloaded'
 
 # Quick file opens.
 # The 'open' command is defined as an alias in .env on each system, eg. to 'code' or 'c9 open'.
@@ -44,6 +44,7 @@ alias sshkey='sshk'
 
 # Other stuff.
 alias art='php artisan'
+alias dda='sudo datadog-agent'
 alias flushdns='sudo killall -HUP mDNSResponder' # Only useful on Macs.
 alias gpglk='gpg --list-keys'
 
@@ -51,7 +52,7 @@ alias gpglk='gpg --list-keys'
 # Lint fixing
 ##########################
 
-alias lf="lfj && lfs && lfp"
+alias lf='lfj && lfs && lfp'
 alias lfj="git ls-tree -r HEAD | grep \"\\.js$\" | awk '{print \$4}' | xargs node_modules/.bin/eslint --ignore-pattern '!.*.js' --fix"
 alias lfs="git ls-tree -r HEAD | grep \"\\.scss$\" | awk '{print \$4}' | xargs node_modules/.bin/stylelint --fix"
 alias lfp="git ls-tree -r HEAD | grep \"\\.php$\" | awk '{print \$4}' | xargs vendor/bin/phpcbf"
@@ -73,15 +74,9 @@ alias book='ap'
 # Composer
 ##########################
 
-alias c="composer"
-alias cl="composer lint"
-alias ct="composer test"
-
-##########################
-# Datadog
-##########################
-
-alias dda='sudo datadog-agent'
+alias c='composer'
+alias cl='composer lint'
+alias ct='composer test'
 
 ##########################
 # Docker
@@ -129,64 +124,63 @@ alias lambda="docker run --rm -v \$(pwd):/var/task lambci/lambda index.handler"
 
 # Note that git aliases themselves should be defined in .gitconfig.
 
-alias bfg="java -jar ~/bfg.jar"
+alias bfg='java -jar ~/bfg.jar'
 
-alias ga="git add"
-alias gaa="git add ."
-alias gam="git amend"
-alias gap="git add -p"
+alias ga='git add'
+alias gaa='git add .'
+alias gam='git amend'
+alias gap='git add --patch'
 
-alias gb="git branch"
-alias gba="gbash"
+alias gb='git branch'
 
-alias gc="git commit"
-alias gcam="git commit -am"
+alias gc='git commit'
+alias gcam='git commit --all -m'
 alias gce="git commit --allow-empty -m 'Empty commit for testing'"
-alias gcm="git commit -m"
+alias gcm='git commit -m'
 alias gcmvb="git commit -m \"Version bump\" && gt"
 alias gcmvbc="git commit -m \"Version bump; changelog\" && gt"
-alias gco="git checkout"
-alias gcob="git checkout -b"
-alias gcom="git checkout master"
+alias gco='git checkout'
+alias gcob='git checkout -b'
+alias gcom='git checkout master'
 
-alias gd="git diff"
-alias gdb="git delbranch"
-alias gdc="git diff --cached"
+alias gd='git diff'
+alias gdb='git delbranch'
+alias gdc='git diff --cached'
 
-alias gf="git fix"
-alias gg="git grep -i"
-alias gh="git hub"
-alias gl="git latest"
-alias gm="git merge"
+alias gf='git fix'
+alias gg='git grep --ignore-case'
+alias gh='git hub'
+alias gl='git latest'
+alias gm='git merge'
 
-alias gn="git noff"
-alias gnb="git newbranch"
+alias gn='git noff'
+alias gnb='git newbranch'
 
-alias gp="git push"
-alias gpl="git pull"
-alias gpuo="git push -u origin"
+alias gp='git push'
+alias gpl='git pull'
+alias gpuo='git push --set-upstream origin'
 
-alias gr="git remote -vv"
-alias grso="git remote set-url origin"
+alias gr='git remote --verbose'
+alias grso='git remote set-url origin'
 
-alias gs="git status"
-alias gt="git tag"
-alias gu="git update"
+alias gs='git status'
+alias gt='git tag'
+alias gu='git update'
 
 ##########################
 # Gulp
 ##########################
 
-alias g="gulp"
+alias g='gulp'
 
-alias glh="gulp lint:html"
-alias gli="gulp lint"
-alias glj="gulp lint:js"
-alias glp="gulp lint:php"
-alias gls="gulp lint:sass"
+alias glh='gulp lint:html'
+alias gli='gulp lint'
+alias glj='gulp lint:js'
+alias glp='gulp lint:php'
+alias gls='gulp lint:sass'
 
-alias gre="gulp release"
-alias gv="gulp version"
+alias gre='gulp release'
+alias gv='gulp version'
 
 ##########################
 # Hadolint
@@ -199,8 +193,8 @@ alias hl='hadolint'
 # Make
 ##########################
 
-alias ml="make lint"
-alias mt="make test"
+alias ml='make lint'
+alias mt='make test'
 
 ##########################
 # Packer
@@ -222,17 +216,17 @@ alias pt='papertrail'
 # Python
 ##########################
 
-alias pip="pip3"
-alias python="python3"
+alias pip='pip3'
+alias python='python3'
 
-alias pl="pylint lambda_function.py | less"
-alias py="pl"
+alias pl='pylint lambda_function.py | less'
+alias py='pl'
 
 ##########################
 # Terminus (Pantheon CLI)
 ##########################
 
-alias terminus="~/vendor/bin/terminus"
+alias terminus='~/vendor/bin/terminus'
 
 ##########################
 # Terraform
@@ -288,20 +282,20 @@ alias vggs='vg global-status'
 # Webpack
 ##########################
 
-alias webpack="yarn webpack"
-alias yw="yarn webpack"
+alias webpack='yarn webpack'
+alias yw='yarn webpack'
 
 ##########################
 # Yarn
 ##########################
 
-alias y="yarn"
-alias yb="yarn build"
-alias ye="yarn execute"
-alias yf="yarn fix"
-alias yl="yarn lint"
-alias yp="yarn publish"
-alias yt="yarn test"
+alias y='yarn'
+alias yb='yarn build'
+alias ye='yarn execute'
+alias yf='yarn fix'
+alias yl='yarn lint'
+alias yp='yarn publish'
+alias yt='yarn test'
 
 # This alias may no longer work.
 #alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
