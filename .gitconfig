@@ -119,3 +119,6 @@
 
   tdmclone = !sh -c 'git clone git@github.com:tdmalone/'"${1}"'.git'
   apclone = !sh -c 'git clone git@bitbucket.org:astutepayroll/'"${1}"'.git'
+
+  # Shortcut for 'git show --show-signature <commitish>'
+  sig = show --show-signature
