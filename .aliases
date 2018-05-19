@@ -38,9 +38,14 @@ alias alvi='vi ~/.aliases'
 alias en='open ~/.env'
 alias envi='vi ~/.env'
 
+# Generates a 4096 bit RSA key with an empty passphrase, expecting a comment to be passed in.
+alias sshk='ssh-keygen -t rsa -f sshkey-"$( date +%Y%m%d-%H%M%S )" -b 4096 -P "" -C'
+alias sshkey='sshk'
+
 # Other stuff.
 alias art='php artisan'
 alias flushdns='sudo killall -HUP mDNSResponder' # Only useful on Macs.
+alias gpglk='gpg --list-keys'
 
 ##########################
 # Lint fixing
