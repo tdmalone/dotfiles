@@ -47,7 +47,7 @@ alias sshkey='sshk'
 alias art='php artisan'
 alias dda='sudo datadog-agent'
 alias flushdns='sudo killall -HUP mDNSResponder' # Only useful on Macs.
-alias gpglk='gpg --list-keys'
+alias gpglk='gpg --list-keys --keyid-format short'
 
 ##########################
 # Lint fixing
