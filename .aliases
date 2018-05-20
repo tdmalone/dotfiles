@@ -252,6 +252,8 @@ alias tfp='tf plan'
 alias tu='tf force-unlock -force'
 alias tv='tf validate'
 
+alias tfo='tf output'
+
 alias tflint='docker run --rm --tty --volume "$( pwd )":/data wata727/tflint --error-with-issues --quiet'
 alias tfl='tflint'
 
