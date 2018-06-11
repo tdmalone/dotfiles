@@ -19,3 +19,9 @@ set list listchars=trail:+
 
 " Create a "ruler" at the 100th column.
 set colorcolumn=100
+
+" Gimme a cursor!
+" This is actually a little disruptive, but better than relying on individual terminal emulator
+" assorted cursor settings...
+set cursorline
+
