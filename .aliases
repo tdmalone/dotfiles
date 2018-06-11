@@ -239,7 +239,9 @@ alias t='terraform'
 alias tf='terraform'
 
 alias ta='tf apply'
-alias tfa='tf apply'
+alias tfa='ta'
+alias tat='ta -target'
+alias tft='tat'
 
 alias tfim='tf import'
 
