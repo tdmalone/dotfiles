@@ -96,7 +96,7 @@
 	<key>NSWindow Frame SharedPreferences</key>
 	<string>385 402 796 473 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>64 0 1376 877 0 0 1440 877 </string>
+	<string>60 0 1380 877 0 0 1440 877 </string>
 	<key>NeverWarnAboutShortLivedSessions_4CF79045-48D6-40E4-A8F7-7FBA282C8A47</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_4CF79045-48D6-40E4-A8F7-7FBA282C8A47_selection</key>
@@ -804,7 +804,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>0A33FC38-008C-461F-B7D6-6EFB4FBC939E</string>
 	<key>NoSyncLastTipTime</key>
-	<real>547884117.00069904</real>
+	<real>549873265.01446497</real>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -817,6 +817,27 @@
 	<array>
 		<string>000</string>
 		<string>0000</string>
+		<string>0001</string>
+		<string>0002</string>
+		<string>0003</string>
+		<string>0004</string>
+		<string>0005</string>
+		<string>0006</string>
+		<string>0007</string>
+		<string>0008</string>
+		<string>0009</string>
+		<string>0010</string>
+		<string>0011</string>
+		<string>0012</string>
+		<string>0013</string>
+		<string>0014</string>
+		<string>0015</string>
+		<string>0016</string>
+		<string>0017</string>
+		<string>0018</string>
+		<string>0019</string>
+		<string>0020</string>
+		<string>0021</string>
 	</array>
 	<key>OpenArrangementAtStartup</key>
 	<false/>
@@ -868,7 +889,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2018-05-13T06:01:57Z</date>
+	<date>2018-06-04T21:50:34Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>ShowBookmarkName</key>
@@ -895,6 +916,8 @@
 	<true/>
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
+	<key>findMode_iTerm</key>
+	<integer>0</integer>
 	<key>iTerm Version</key>
 	<string>3.1.6</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
