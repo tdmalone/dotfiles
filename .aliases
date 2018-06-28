@@ -40,6 +40,8 @@ alias al='open ~/.aliases'
 alias alvi='vi ~/.aliases'
 alias en='open ~/.env'
 alias envi='vi ~/.env'
+alias sshc='open ~/.ssh/config'
+alias sshcvi='vi ~/.ssh/config'
 
 # Generates a 4096 bit RSA key with an empty passphrase, expecting a comment to be passed in.
 alias sshk='ssh-keygen -t rsa -f sshkey-"$( date +%Y%m%d-%H%M%S )" -b 4096 -P "" -C'
@@ -70,8 +72,21 @@ alias ag='ansible-galaxy'
 alias agi='ag install'
 
 alias ap='ansible-playbook --diff'
+alias apm='ap main.yml'
+alias apml='ap main.yml -l'
 alias apb='ap'
+alias apbm='apm'
 alias book='ap'
+
+alias upd='apb ~/Documents/astute/tools/tim-tools/tim-playbook.yml -l'
+
+##########################
+# AWS CLI
+##########################
+
+function dam() {
+  aws sts decode-authorization-message --encoded-message "${1}" | jq '.DecodedMessage | fromjson'
+}
 
 ##########################
 # Composer
@@ -209,6 +224,8 @@ alias pb='pk build'
 alias pv="find *.packer.json | xargs -I % sh -c 'echo % && packer validate %'"
 alias pkv='pv'
 
+alias pbc='../../build.sh .'
+
 ##########################
 # Papertrail
 ##########################
@@ -260,6 +277,8 @@ alias tfo='tf output'
 
 alias tflint='docker run --rm --tty --volume "$( pwd )":/data wata727/tflint --error-with-issues --quiet'
 alias tfl='tflint'
+
+alias tia='ti && ta'
 
 ##########################
 # Travis CI CLI
