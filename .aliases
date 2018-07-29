@@ -102,6 +102,38 @@ alias cl='composer lint'
 alias ct='composer test'
 
 ##########################
+# DNS Made Easy
+##########################
+
+# Gets a JSON response of records under a particular domain at DNS Made Easy.
+# WARNING: This does NOT handle pagination.
+function dnsme() {
+  DOMAIN_ID="${1}"
+  DATE="$( date -u "+%a, %d %b %G %H:%M:%S GMT" )"
+  HMAC="$( echo -n "$DATE" | openssl sha1 -hmac "${DME_SKEY}" -binary | xxd -plain )"
+  curl --silent "https://api.dnsmadeeasy.com/V2.0/dns/managed/${DOMAIN_ID}/records/" \
+    --header "x-dnsme-apiKey:${DME_AKEY}" \
+    --header "x-dnsme-requestDate:${DATE}" \
+    --header "x-dnsme-hmac:${HMAC}"
+}
+
+# Generates a command to import a DNS Made Easy record into Terraform (with our module structure).
+function dnsme_tfim() {
+
+  DOMAIN_NAME="${1}"
+  DOMAIN_ID="${2}"
+  RESULT="$( dnsme "${DOMAIN_ID}" )"
+  IDS=($( echo "${RESULT}" | jq --raw-output ".data[].id" ))
+  TYPES=($( echo "${RESULT}" | jq --raw-output ".data[].type" ))
+
+  i=0
+  for id in "${IDS[@]}"; do
+    ((i++))
+    echo "tfim module.${DOMAIN_NAME//./_}.module.${TYPES[$i]}.dme_record.main ${DOMAIN_ID}/${IDS[$i]}"
+  done
+}
+
+##########################
 # Docker
 ##########################
 
