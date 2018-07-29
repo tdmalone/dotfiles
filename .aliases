@@ -30,6 +30,8 @@ alias l='ll'
 alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
 alias s='sudo su -'
 alias scwd='sudo su'
+alias screen='screen -r || screen'
+alias sc='screen'
 alias trace='traceroute'
 alias tracert='traceroute'
 alias u='source ~/.zshrc && echo zsh configuration reloaded'
@@ -52,6 +54,8 @@ alias art='php artisan'
 alias dda='sudo datadog-agent'
 alias flushdns='sudo killall -HUP mDNSResponder' # Only useful on Macs.
 alias gpglk='gpg --list-keys --keyid-format short'
+alias wx='curl wttr.in/melbourne'
+alias calc='bc --quiet'
 
 ##########################
 # Lint fixing
@@ -78,7 +82,8 @@ alias apb='ap'
 alias apbm='apm'
 alias book='ap'
 
-alias upd='apb ~/Documents/astute/tools/tim-tools/tim-playbook.yml -l'
+alias upd='updall -l'
+alias updall='apb ~/Documents/astute/tools/tim-tools/tim-playbook.yml'
 
 ##########################
 # AWS CLI
@@ -254,11 +259,15 @@ alias terminus='~/vendor/bin/terminus'
 
 alias t='terraform'
 alias tf='terraform'
+alias tfv='tf version'
+
+alias tfc='tf console'
 
 alias ta='tf apply'
 alias tfa='ta'
 alias tat='ta -target'
-alias tft='tat'
+alias tft='tf taint'
+alias tanow='tf apply -var "apply_immediately=true"'
 
 alias tfim='tf import'
 
@@ -271,6 +280,7 @@ alias tp='tf plan'
 alias tfp='tf plan'
 
 alias tu='tf force-unlock -force'
+alias tfunlock='tu'
 alias tv='tf validate'
 
 alias tfo='tf output'
@@ -279,6 +289,7 @@ alias tflint='docker run --rm --tty --volume "$( pwd )":/data wata727/tflint --e
 alias tfl='tflint'
 
 alias tia='ti && ta'
+alias tfsm='tf state mv'
 
 ##########################
 # Travis CI CLI
