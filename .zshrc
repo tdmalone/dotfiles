@@ -51,3 +51,10 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # Vault.
 complete -o nospace -C /usr/local/bin/vault vault
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/sls.zsh
