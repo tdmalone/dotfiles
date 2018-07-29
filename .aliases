@@ -32,6 +32,8 @@ alias s='sudo su -'
 alias scwd='sudo su'
 alias screen='screen -r || screen'
 alias sc='screen'
+alias tm='tmux attach || tmux'
+alias tms='tmux source-file ~/.tmux.conf && echo tmux configuration reloaded'
 alias trace='traceroute'
 alias tracert='traceroute'
 alias u='source ~/.zshrc && echo zsh configuration reloaded'
@@ -330,7 +332,7 @@ alias tfsm='tf state mv'
 # See also: sensitive aliases in .env for encrypting common values.
 
 alias te='travis encrypt'
-alias tm='travis monitor'
+alias tmo='travis monitor'
 
 ##########################
 # Vagrant
