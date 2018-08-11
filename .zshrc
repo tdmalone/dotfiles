@@ -58,3 +58,4 @@ complete -o nospace -C /usr/local/bin/vault vault
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/sls.zsh
+complete -o nospace -C /usr/local/bin/terraform terraform
