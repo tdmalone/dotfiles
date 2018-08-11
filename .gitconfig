@@ -8,8 +8,6 @@
   gpgsign = true
 [gpg]
   program = gpg2
-[format]
-  pretty = oneline
 [grep]
   linenumber = true
 [interactive]
