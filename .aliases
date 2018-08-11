@@ -28,6 +28,10 @@ alias kb='keybase'
 alias ll='ls -alFA'
 alias l='ll'
 alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
+alias hl='heroku local'
+alias ngrok='~/ngrok http --subdomain tdmalone --region au'
+alias ng='ngrok'
+alias ng5k='ngrok 5000'
 alias s='sudo su -'
 alias scwd='sudo su'
 alias screen='screen -r || screen'
@@ -244,7 +248,7 @@ alias gv='gulp version'
 ##########################
 
 alias hadolint='docker run --rm -i hadolint/hadolint < Dockerfile'
-alias hl='hadolint'
+alias dl='hadolint'
 
 ##########################
 # Make
