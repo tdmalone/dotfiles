@@ -19,6 +19,7 @@
 ##########################
 
 # Laziness ;).
+alias azl='az login'
 alias conn='ping 61.88.88.88'
 alias cls='clear'
 alias disk='sudo du -d1 -hx | sort -rh'
@@ -29,6 +30,7 @@ alias ll='ls -alFA'
 alias l='ll'
 alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
 alias hl='heroku local'
+alias hlog='heroku logs --tail'
 alias ngrok='~/ngrok http --subdomain tdmalone --region au'
 alias ng='ngrok'
 alias ng5k='ngrok 5000'
@@ -50,6 +52,7 @@ alias en='open ~/.env'
 alias envi='vi ~/.env'
 alias sshc='open ~/.ssh/config'
 alias sshcvi='vi ~/.ssh/config'
+alias gitc='open ~/.gitconfig'
 
 # Generates a 4096 bit RSA key with an empty passphrase, expecting a comment to be passed in.
 alias sshk='ssh-keygen -t rsa -f sshkey-"$( date +%Y%m%d-%H%M%S )" -b 4096 -P "" -C'
@@ -67,6 +70,8 @@ alias calc='bc --quiet'
 # Lint fixing
 ##########################
 
+alias el='DEBUG=eslint:cli-engine eslint --color --env es6:true --parser-options ecmaVersion:9 *.js'
+
 alias lf='lfj && lfs && lfp'
 alias lfj="git ls-tree -r HEAD | grep \"\\.js$\" | awk '{print \$4}' | xargs node_modules/.bin/eslint --ignore-pattern '!.*.js' --fix"
 alias lfs="git ls-tree -r HEAD | grep \"\\.scss$\" | awk '{print \$4}' | xargs node_modules/.bin/stylelint --fix"
@@ -83,13 +88,22 @@ alias agi='ag install'
 
 alias ap='ansible-playbook --diff'
 alias apm='ap main.yml'
-alias apml='ap main.yml -l'
+alias apml='apm -l'
+alias apmt='apm -t'
 alias apb='ap'
 alias apbm='apm'
 alias book='ap'
 
 alias upd='updall -l'
 alias updall='apb ~/Documents/astute/tools/tim-tools/tim-playbook.yml'
+
+function apmv() {
+  ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible/$1 apm
+}
+
+function aves() {
+  ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible/$1 ansible-vault encrypt_string
+}
 
 # TODO.
 alias ad='ansible localhost -m debug -a 'var=ENTER_VAR_HERE' --vault-password-file=~/.ansible/ENTER_VAULT_PASSWORD_FILE_HERE'
@@ -184,13 +198,18 @@ alias gf='git fix'
 alias gg='git grep --ignore-case'
 alias gh='git hub'
 alias gl='git latest'
+alias glm='gl --no-merges'
+alias glmm='glm master..'
 alias gm='git merge'
 
 alias gn='git noff'
 alias gnb='git newbranch'
 
 alias gp='git push'
+alias gpta='git push && git push --tags'
+alias gpf='git push --force'
 alias gpl='git pull'
+alias gpr='git pull --rebase'
 alias gpuo='git push --set-upstream origin'
 
 alias gr='git remote --verbose'
@@ -288,6 +307,7 @@ alias tin='tf init'
 
 alias tp='tf plan'
 alias tfp='tf plan'
+alias tpo='tp -out'
 
 alias tu='tf force-unlock -force'
 alias tfunlock='tu'
@@ -342,6 +362,7 @@ alias yw='yarn webpack'
 ##########################
 
 alias y='yarn'
+alias ya='yarn add'
 alias yb='yarn build'
 alias ye='yarn execute'
 alias yf='yarn fix'
@@ -351,6 +372,4 @@ alias yt='yarn test'
 alias yut='yarn unit-tests'
 alias yit='yarn integration-tests'
 alias yet='yarn e2e-tests'
-
-# This alias may no longer work.
-#alias yli="yarn link && cd $(cygpath $LOCALAPPDATA)/Yarn/config/global && yarn link $1"
+alias ylt='yarn lint && yarn test'

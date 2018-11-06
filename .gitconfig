@@ -42,9 +42,13 @@
   newbranch = !sh -c 'git checkout -b $1 && git push -u origin $1' -
 
   # Gets merged branches, skips any branches we know we always want to keep (including the current
-  # one), trims whitespace, and then deletes the branches locally and remotely. Note the excluded
-  # branches includes specific named branches for the current dev team at Chromatix.
-  delmerged = "!f(){ git branch --merged | awk '{$1=$1};1' | egrep -v \"(^\\*)|(^(master|staging|hotfixes|tim|julian|david|dave|tong|dan)$)\" | sed 's,.,git delbranch \\0,e'; }; f"
+  # one), trims whitespace, and then deletes the branches locally and remotely.
+  # NOTE: MIGHT NOT BE WORKING AT THE MOMENT - might need simplification/fixing.
+  #delmerged = "!f(){ git branch --merged | awk '{$1=$1};1' | egrep -v \"(^\\*)|(^(master)$)\" | sed 's,.,git delbranch \\0,e'; }; f"
+
+  # Gets merged branches, skips any branches we know we always want to keep (including the current
+  # one), trims whitespace, and then deletes the branches locally.
+  delmerged = "!git branch --merged | awk '{$1=$1};1' | egrep -v \"(^\\*)|(^(master)$)\" | xargs git branch -d"
 
   uncommit = reset --soft HEAD~
   unstage = !echo && git reset HEAD && echo && git status
@@ -90,7 +94,7 @@
   bump = !git commit -am "Version bump" && git tag $1 && git push && git push --tags
 
   fix = !git add . && git stash && git stash drop && git status
-  conflict = grep \"<<<<<<< HEAD\"
+  conflict = grep \"<<<<<<<\"
 
   statii = !echo && sh -c 'git latest && echo && git status && echo && git branch -vv && echo && git stash list' -
   pullpush = !echo && sh -c 'git pull --all && echo && git pull --tags && echo && git push --all && echo && SKIP_HOOKS=true git push --tags' -
