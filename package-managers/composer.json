@@ -1,9 +1,10 @@
 {
     "require": {
-        "phpunit/phpunit": "^7.0",
-        "asm89/twig-lint": "^1.0",
+        "phpunit/phpunit": "^7.2",
         "chromatix/phpcs-config-chromatix": "^0.0.17",
         "chromatix/phpcs-config-chromatix-no-wordpress": "^0.0.4",
-        "squizlabs/php_codesniffer": "^3.2"
+        "squizlabs/php_codesniffer": "^3.3",
+        "pantheon-systems/terminus": "^1.9",
+        "asm89/twig-lint": "^1.0"
     }
 }
