@@ -12,7 +12,27 @@
 # New, unsorted aliases
 ##########################
 
-# ...
+# TODOs without a ticket:
+alias tdt='git grep TODO | grep -v "TODO: \[OP-" | grep -v "TODO: Reference "'
+alias tdtc='tdt | wc -l'
+
+alias j='jupyter'
+alias jn='j notebook'
+alias ni='node index.js'
+
+alias fb='firebase'
+alias ip='curl api.ipify.org'
+
+# Given a filename with a gpg extension, decrypts it and outputs it with the same filename -
+# but without the extension.
+function gpgdc() {
+  gpg --output "${1%.gpg}" --decrypt "$1"
+}
+
+# 'Ansible grep' - usage 'ang something' - designed for use in the Astute Ansible repo only.
+function ang() {
+  git grep --ignore-case "$1" | grep -v "\.sql:" | grep -v "\.js:"
+}
 
 ##########################
 # Assorted aliases
@@ -163,7 +183,7 @@ alias di="docker images"
 alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: docker run -it % bash -il"
 
 # Test a Lambda function in the current directory using LambCI's Docker images.
-alias lambda="docker run --rm -v \$(pwd):/var/task lambci/lambda index.handler"
+alias lambda="docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_SESSION_TOKEN --env AWS_DEFAULT_REGION --rm -v \$(pwd):/var/task lambci/lambda:nodejs8.10 index.handler"
 
 ##########################
 # Git
