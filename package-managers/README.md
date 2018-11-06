@@ -4,7 +4,7 @@
   To generate run `apt list --installed | grep -v 'Listing...' > apt.txt`
 
 * **Chocolatey**<br />
-  Coming soon<br />
+  Coming soon (maybe)<br />
   To generate run `choco list --local-only > choco.txt`
 
 * **[Composer](composer.json)**<br />
