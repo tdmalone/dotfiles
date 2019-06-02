@@ -120,7 +120,14 @@
   hub = !start chrome $(sed 's,\\.git,/,g \n s,:,/,g \n s,git@,https://,g' <<< `git ls-remote --get-url`)
 
   tdmclone = !sh -c 'git clone git@github.com:tdmalone/'"${1}"'.git'
+  awsclone = !sh -c 'git clone ssh://git.tm.id.au/v1/repos/'"${1}"
+  awsauclone = !sh -c 'git clone ssh://git.au.tm.id.au/v1/repos/'"${1}"
+  awsusclone = !sh -c 'git clone ssh://git.us.tm.id.au/v1/repos/'"${1}"
   apclone = !sh -c 'git clone git@bitbucket.org:astutepayroll/'"${1}"'.git'
 
   # Shortcut for 'git show --show-signature <commitish>'
   sig = show --show-signature
+
+  whatedited = !sh -c 'git log --full-history -- '"${1}"
+
+  show-encrypted = !sh -c 'git-crypt status | grep -v \"not encrypted\"'
