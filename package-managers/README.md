@@ -11,8 +11,8 @@
   Automatically managed via symlink<br />
   To generate manually run `composer global show > composer.txt`
 
-* **[Homebrew](brew.txt)**<br />
-  To generate run `brew list > brew.txt`
+* **[Homebrew](Brewfile)**<br />
+  To generate run `brew bundle dump --force`
 
 * **[pip](pip.txt)**<br />
   To generate run `pip list > pip.txt` (or potentially `pip3 list > pip.txt`)
