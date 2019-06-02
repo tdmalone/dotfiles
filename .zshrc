@@ -43,7 +43,7 @@ tdm_aws_context() {
 
   if [ -f "${cache_file}" ]; then
     cache_modified="$( date -r "${cache_file}" +%s)"
-    if egrep '(min|sec)' "${cache_file}" > /dev/null; then
+    if grep --extended-regexp '(min|sec)' "${cache_file}" > /dev/null; then
       cache_toleration="60" # Refresh the cache every minute if we're below an hour.
     fi
     if [ "${cache_modified}" -gt "$(( now - cache_toleration ))" ]; then
@@ -71,7 +71,7 @@ tdm_aws_context() {
     # Looks like we have an AWS profile set, so we'll attempt to show any MFA expiry details (as per
     # the place aws-mfa stores them in), along with the profile name.
 
-    mfa_expiry_date="$( aws configure get ${AWS_PROFILE}.expiration )"
+    mfa_expiry_date="$( aws configure get "${AWS_PROFILE}.expiration" )"
     mfa_expiry_warning_threshold="$(( 30 * 60 ))" # Make the prompt a bit noisy.
 
     if [ "${mfa_expiry_date:-}" != "" ]; then
