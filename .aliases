@@ -1,127 +1,145 @@
 # shellcheck shell=bash
-# shellcheck disable=SC2142
 
-# Disabled directives:
-# https://github.com/koalaman/shellcheck/wiki/SC2142 - positional params are quoted
+####################################################################################################
+# Tim's shell aliases (and functions)
+# https://github.com/tdmalone/dotfiles/blob/master/.aliases
+#
+# Copyright (c) 2018-2019 Tim Malone
+# License: https://github.com/tdmalone/dotfiles/blob/master/LICENSE
+#
+# Sorted by category and then (generally) alphabetically with aliases first
+# Any sensitive information is expected to be provided by environment variables in a separate file
+#
+# DISCLAIMER:
+# These have been written for my use-case only and have not been thoroughly tested in different
+# circumstances. I use macOS with zsh and additional GNU utils, and generally try to keep all
+# third-party tools fairly up-to-date. Your mileage may vary on different platforms and versions.
+####################################################################################################
+
+####################################################################################################
+# Assorted aliases & functions
+####################################################################################################
+
+##########################
+# New unsorted
+##########################
+
+# ...
+
+##########################
+# Sorted assorted
+##########################
+
+alias c='cls'
+alias calc='echo "Enter your maths equations, or type \"quit\" to exit." && bc --quiet'
+alias cls='clear'
+#alias conn='ping 61.88.88.88'
+alias conn='ping google.com'
+alias copy='pbcopy'
+
+alias disk='sudo du -d1 -hx | sort -rh'
+
+alias e='exit'
+alias ex='export'
+alias exe='chmod +x'
+
+alias flushdns='sudo killall -HUP mDNSResponder' # Only useful on Macs.
+
+alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
+
+alias ip='curl api.ipify.org'
+
+alias l='ll'
+alias ll='ls -alFA'
+
+alias powershell='pwsh'
+alias psh='pwsh'
+
+alias s='sudo su -'
+alias sc='screen -rd || screen'
+alias screen='screen -rd || screen'
+alias scwd='sudo su'
+alias sp='code ~/Desktop/scratchpad'
 
 # Make sudo work with aliases. May not work properly though...
 # @see https://askubuntu.com/a/22043/421637
 #alias sudo='sudo '
 
-##########################
-# New, unsorted aliases
-##########################
-
-# TODOs without a ticket:
-alias tdt='git grep TODO | grep -v "TODO: \[OP-" | grep -v "TODO: Reference "'
-alias tdtc='tdt | wc -l'
-
-alias j='jupyter'
-alias jn='j notebook'
-alias ni='node index.js'
-
-alias fb='firebase'
-alias ip='curl api.ipify.org'
-
-# Given a filename with a gpg extension, decrypts it and outputs it with the same filename -
-# but without the extension.
-function gpgdc() {
-  gpg --output "${1%.gpg}" --decrypt "$1"
-}
-
-# 'Ansible grep' - usage 'ang something' - designed for use in the Astute Ansible repo only.
-function ang() {
-  git grep --ignore-case "$1" | grep -v "\.sql:" | grep -v "\.js:"
-}
-
-##########################
-# Assorted aliases
-##########################
-
-# Laziness ;).
-alias azl='az login'
-alias conn='ping 61.88.88.88'
-alias cls='clear'
-alias disk='sudo du -d1 -hx | sort -rh'
-alias e='exit'
-alias ex='export'
-alias kb='keybase'
-alias ll='ls -alFA'
-alias l='ll'
-alias headers='curl --silent --location --dump-header /dev/stdout --output /dev/null'
-alias hl='heroku local'
-alias hlog='heroku logs --tail'
-alias ngrok='~/ngrok http --subdomain tdmalone --region au'
-alias ng='ngrok'
-alias ng5k='ngrok 5000'
-alias s='sudo su -'
-alias scwd='sudo su'
-alias screen='screen -rd || screen'
-alias sc='screen -rd || screen'
 alias tm='tmux attach || tmux'
 alias tms='tmux source-file ~/.tmux.conf && echo tmux configuration reloaded'
 alias trace='traceroute'
 alias tracert='traceroute'
-alias u='source ~/.zshrc && echo zsh configuration reloaded'
 
-# Quick file opens.
-# The 'open' command is defined as an alias in .env on each system, eg. to 'code' or 'c9 open'.
-alias al='open ~/.aliases'
-alias alvi='vi ~/.aliases'
-alias en='open ~/.env'
-alias envi='vi ~/.env'
-alias sshc='open ~/.ssh/config'
-alias sshcvi='vi ~/.ssh/config'
-alias gitc='open ~/.gitconfig'
+alias x='exe'
 
-# Generates a 4096 bit RSA key with an empty passphrase, expecting a comment to be passed in.
-alias sshk='ssh-keygen -t rsa -f sshkey-"$( date +%Y%m%d-%H%M%S )" -b 4096 -P "" -C'
-alias sshkey='sshk'
-
-# Other stuff.
-alias art='php artisan'
-alias dda='sudo datadog-agent'
-alias flushdns='sudo killall -HUP mDNSResponder' # Only useful on Macs.
-alias gpglk='gpg --list-keys --keyid-format short'
 alias wx='curl wttr.in/melbourne'
-alias calc='bc --quiet'
 
 ##########################
-# Lint fixing
+# Quick file opens
 ##########################
 
-alias el='DEBUG=eslint:cli-engine eslint --color --env es6:true --parser-options ecmaVersion:9 *.js'
+alias al='code ~/.aliases'
+alias alvi='vi ~/.aliases'
 
-alias lf='lfj && lfs && lfp'
-alias lfj="git ls-tree -r HEAD | grep \"\\.js$\" | awk '{print \$4}' | xargs node_modules/.bin/eslint --ignore-pattern '!.*.js' --fix"
-alias lfs="git ls-tree -r HEAD | grep \"\\.scss$\" | awk '{print \$4}' | xargs node_modules/.bin/stylelint --fix"
-alias lfp="git ls-tree -r HEAD | grep \"\\.php$\" | awk '{print \$4}' | xargs vendor/bin/phpcbf"
+alias aconfig='awsc'
+alias awsc='code ~/.aws/credentials'
+alias awsc2='code ~/.aws/config'
+alias awsco='code ~/.aws/config'
+alias awsconfig='awsc'
+
+alias en='code ~/.env'
+alias envi='vi ~/.env'
+
+alias gconfig='gitc'
+alias gitc='code ~/.gitconfig'
+alias gitconfig='gitc'
+
+alias kconfig='kubec'
+alias kubec='code ~/.kube/config'
+alias kubeconfig='kubec'
+
+alias sconfig='sshc'
+alias sshc='code ~/.ssh/config'
+alias sshconfig='sshc'
+alias sshcvi='vi ~/.ssh/config'
+
+alias zconfig='zshc'
+alias zshc='code ~/.zshrc'
+alias zshrc='code ~/.zshrc'
+
+####################################################################################################
+# Third party programs & services
+####################################################################################################
 
 ##########################
 # Ansible
 ##########################
 
-alias an='ansible'
-
 alias ag='ansible-galaxy'
 alias agi='ag install'
-
-alias ap='ansible-playbook --diff'
-alias apm='ap main.yml'
-alias apml='apm -l'
-alias apmt='apm -t'
+alias an='ansible'
+alias ap='ansible-playbook --diff --inventory="${TIM_WORK_HOMEDIR}/ansible/aws-inventory"'
 alias apb='ap'
 alias apbm='apm'
+alias apm='ap main.yml'
+alias apml='apm --limit'
+alias apmt='apm --tag'
+
 alias book='ap'
 
 alias upd='updall -l'
-alias updall='apb ~/Documents/astute/tools/tim-tools/tim-playbook.yml'
+alias updall='apb "${TIM_WORK_HOMEDIR}/tools/tim-tools/tim-playbook.yml"'
 
-function apmv() {
+# 'Ansible grep' - usage 'ang something' - designed for use in the Astute Ansible repo only.
+ang() {
+  git grep --ignore-case "$1" | grep -v "\.sql:" | grep -v "\.js:"
+}
+
+apmv() {
   ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible/$1 apm
 }
 
-function aves() {
+aves() {
   ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible/$1 ansible-vault encrypt_string
 }
 
@@ -130,60 +148,287 @@ alias ad='ansible localhost -m debug -a 'var=ENTER_VAR_HERE' --vault-password-fi
 alias ae='ansible-vault encrypt_string --vault-id=ENTER_VAULT_NAME_HERE@prompt --encrypt-vault-id ENTER_VAULT_NAME_HERE'
 
 ##########################
-# AWS CLI
+# AWS
+# see also: AWS EC2, AWS EKS
 ##########################
 
-function dam() {
-  aws sts decode-authorization-message --encoded-message "${1}" | jq '.DecodedMessage | fromjson'
+alias alo='alogout'
+alias amfaf='aws-mfa --force'
+alias amp='amplify'
+alias asmfa='areset && aws-mfa --assume-role arn:aws:iam::${AWS_WORK_TIM_ACCOUNT_ID}:role/OrganizationAccountAccessRole --duration 43200'
+alias asu='asudo'
+alias aupd='rm -f ${HOME}/.zshrc_tdm_aws_context.*'
+alias awscs='aws configure set'
+
+alias cll='aws logs'
+
+alias ecr='aws ecr'
+alias ecs='ecs-cli'
+alias elb='aws elbv2'
+
+alias gci='sts get-caller-identity'
+
+alias klg='kms list-grants --key-id'
+alias kms='aws kms'
+
+alias r53='aws route53'
+alias r53d='aws route53domains'
+alias rds='aws rds'
+
+alias s3='aws s3'
+alias s32='aws s3api'
+alias s3a='aws s3api'
+alias sns='aws sns'
+alias sqs='aws sqs'
+alias sts='aws sts'
+
+alogout() {
+  areset
+  unset AWS_PROFILE
 }
+
+amfa() {
+  areset
+  aws-mfa
+}
+
+areset() {
+  unset AWS_ACCESS_KEY_ID
+  unset AWS_SECRET_ACCESS_KEY
+  unset AWS_SESSION_TOKEN
+  export AWS_PROFILE="${AWS_TIM_DESIRED_PROFILE}"
+  aupd
+}
+
+asudo() {
+
+  ACCOUNT_NUMBER="${1:-}"
+  ACCOUNT_FRIENDLY_NAME="${2:-}"
+  ROLE_NAME="${3:-OrganizationAccountAccessRole}"
+
+  if [ -z "${ACCOUNT_NUMBER}" ]; then ACCOUNT_NUMBER="${AWS_WORK_TIM_ACCOUNT_ID}"; fi
+
+  amfa
+
+  if [ -z "${ACCOUNT_FRIENDLY_NAME}" ]; then ACCOUNT_FRIENDLY_NAME="${ACCOUNT_NUMBER}"; fi
+  PROFILE_NAME="${AWS_PROFILE}-${ACCOUNT_FRIENDLY_NAME}"
+
+  echo "Assuming role..."
+  CREDS="$(awsar "${ROLE_NAME}" "${ACCOUNT_NUMBER}" "silent")"
+
+  awscs aws_access_key_id "$(echo "${CREDS}" | jqr .Credentials.AccessKeyId)" --profile "${PROFILE_NAME}"
+  awscs aws_secret_access_key "$(echo "${CREDS}" | jqr .Credentials.SecretAccessKey)" --profile "${PROFILE_NAME}"
+  awscs aws_session_token "$(echo "${CREDS}" | jqr .Credentials.SessionToken)" --profile "${PROFILE_NAME}"
+  awscs expiration "$(echo "${CREDS}" | jqr .Credentials.Expiration | sed -e 's/T/ /' -e 's/Z/ /')" --profile "${PROFILE_NAME}"
+
+  export AWS_PROFILE="${PROFILE_NAME}"
+
+  echo
+  echo -n "Using: " && echo "${CREDS}" | jqr .AssumedRoleUser.Arn
+  echo -n "Until: " && echo "${CREDS}" | jqr .Credentials.Expiration
+
+} # asudo
+
+awsar() {
+
+  ROLE_NAME="${1}"
+  ACCOUNT_NUMBER="${2:-}"
+  MODE="${3:-}"
+
+  if [ -z "${ACCOUNT_NUMBER}" ]; then ACCOUNT_NUMBER="${AWS_WORK_MASTER_ACCOUNT_ID}"; fi
+
+  # TODO: Remove hyphens in account number (to make it easier to copy from a hyphen'ed display).
+  # TODO: Accept aliases and map them to account numbers, probably stored in env vars?
+
+  if [ "${MODE}" != "silent" ]; then
+    echo
+    echo "Assuming ${ROLE_NAME} in ${ACCOUNT_NUMBER}..."
+  fi
+
+  sts assume-role --role-arn "arn:aws:iam::${ACCOUNT_NUMBER}:role/${ROLE_NAME}" --role-session-name "$(whoami)"
+
+}
+
+dam() {
+  sts decode-authorization-message --encoded-message "${1}" | jq '.DecodedMessage | fromjson'
+}
+
+##########################
+# AWS EC2
+# see also: AWS
+##########################
+
+alias ec2='aws ec2'
+
+# TODO: Ignore terminated instances.
+instance_id() {
+
+  # Replaces dots with dashes to match our instance Name tags.
+  INSTANCE_NAME="${1//./-}"
+
+  ec2 describe-instances --filters "Name=tag:Name,Values=${INSTANCE_NAME}" | jqr ".Reservations[0].Instances[0].InstanceId"
+}
+
+# Outputs available marketplace-listed (aka second-hand) reserved instances to JSON.
+# May take some time to gather data from the EC2 API.
+#
+# https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-reserved-instances-offerings.html
+# Might be useful? https://github.com/TerbiumLabs/check-reserved-instances
+#
+# Note that, if nothing else, 'no up-front' convertible one year RIs are pretty much a no-brainer!
+# (probably won't find them on the marketplace though, right?)
+#
+# Also note: the 'reserved instance saving' correlates with how much the instance will have to be
+# running to benefit from that saving. eg. a 41% saving? The instance has to be running at least
+# 59% of the time to break even! This means under some circumstances you _can_ still reserve a
+# part-time instance.
+reserved_instances() {
+
+  months="${1:-1}" # Default to 1 month if not provided (1 month is the minimum).
+  filename="$( mktemp )"
+
+  one_day="$((60 * 60 * 24))"
+  one_month="$((one_day * 30))"
+
+  ec2 describe-reserved-instances-offerings --product-description "Linux/UNIX" --filters "Name=marketplace,Values=true" --filters "Name=duration,Values=$(( one_month * months ))" > "${filename}"
+
+  # TODO: Include an option for adding the AZ filter '--filters Name=availability-zone,Values=a'?
+
+  code "${filename}"
+
+}
+
+snapshot() {
+  ec2 create-snapshot --volume-id "$( volume_id "${1}" )"
+}
+
+start_instance() {
+  ec2 start-instances --instance-ids "$( instance_id "${1}" )"
+}
+
+stop_instance() {
+  ec2 stop-instances --instance-ids "$( instance_id "${1}" )"
+}
+
+volume_id() {
+
+  # Replaces dots with dashes to match our instance Name tags.
+  VOLUME_NAME="${1//./-}"
+
+  ec2 describe-volumes --filters "Name=tag:Name,Values=${VOLUME_NAME}" | jqr ".Volumes[0].VolumeId"
+}
+
+##########################
+# AWS EKS
+# see also: Kubernetes
+##########################
+
+alias ek='ak'
+alias eks='aws eks'
+alias eksc='eksctl'
+
+alias kaws='ak'
+alias kaws2='kubernetic && kuse kubernetic'
+
+ak() {
+
+  cluster_name="$1"
+  account_number="$2"
+  source_profile="${AWS_TIM_DESIRED_PROFILE}"
+
+  region="${AWS_DESIRED_REGION}"
+  role_name="OrganizationAccountAccessRole"
+
+  if [ -z "${cluster_name}" ]; then echo "Please provide a cluster name."; return 0; fi
+  if [ -z "${account_number}" ]; then echo "Please provide an AWS account number."; return 0; fi
+
+  cluster_arn="arn:aws:eks:${region}:${account_number}:cluster/${cluster_name}"
+  role_arn="arn:aws:iam::${account_number}:role/${role_name}"
+  profile_name="ak-${cluster_name}"
+
+  awscs region "${region}"                 --profile "${profile_name}"
+  awscs role_arn "${role_arn}"             --profile "${profile_name}"
+  awscs source_profile "${source_profile}" --profile "${profile_name}"
+
+  eks update-kubeconfig --name "${cluster_name}" --profile "${profile_name}"
+
+  kc unset "contexts.${cluster_name}"
+  kc rename-context "${cluster_arn}" "${cluster_name}"
+
+}
+
+kubernetic() {
+  cluster_name="$1"
+  if [ -z "${cluster_name}" ]; then echo "Please provide a cluster name."; return 0; fi
+  token="$(aws-iam-authenticator token --cluster-id "${cluster_name}" | jqr ".status.token")"
+  kc set-credentials kubernetic --token="${token}"
+}
+
+##########################
+# Azure
+##########################
+
+alias azl='az login'
 
 ##########################
 # Composer
 ##########################
 
-alias c='composer'
 alias cl='composer lint'
 alias ct='composer test'
+
+##########################
+# Datadog
+##########################
+
+alias dda='sudo datadog-agent'
 
 ##########################
 # Docker
 ##########################
 
+alias datt="docker attach \$(basename \$(pwd))Instance" # Reattach a terminal & stdin.
+alias dcd="dcp down"
+alias dcdv="dcd --volumes"
+alias dcp="docker-compose"
+alias dcs="dcp stop"
+alias dcu="dcp up"
+alias di="docker images"
+alias dlog="docker logs \$(basename \$(pwd))Instance"
+alias drm="dstop && docker rm \$(basename \$(pwd))Instance"
+alias drs="docker restart \$(basename \$(pwd))Instance"
+alias dps="docker ps -a"
+alias drunv="docker run -d -p 8080:80 -p 8081:443 -v '\$(pwd)'/src:/var/www/html/src --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
+alias drun="docker run -d -p 8080:80 -p 8081:443 --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
+alias dstart="docker start \$(basename \$(pwd))Instance"
+alias dstop="docker stop \$(basename \$(pwd))Instance"
+
+# @see https://stackoverflow.com/questions/44722341/docker-login-unknown-shorthand-flag-e
+alias daws='$(AWS_DEFAULT_REGION="${AWS_DESIRED_REGION}" ecr get-login --no-include-email)'
+alias dlogin="daws"
+
 # WARNING: Some of these have only been tested in Git Bash on Windows.
 # TODO: See more at https://github.com/tcnksm/docker-alias/blob/master/zshrc
-
-# Build in the current directory.
-alias dbuild="docker build -t \$(basename \$(pwd)) \$(pwd)"
 
 # Run bash in a Docker container, assuming the container is named (your current basename)Instance.
 alias dbash="docker start \$(basename \$(pwd))Instance && docker exec -it \$(basename \$(pwd))Instance bash"
 
-# Stop and remove ALL Docker containers.
-alias drmc="echo && echo 'Removing all Docker containers...' && echo && docker ps -a | awk '{print \$1}' | grep -v CONTAINER | xargs -r docker stop | xargs -r docker rm"
-
-# Remove ALL Docker images.
-alias drmi="echo && echo 'Removing all Docker images...' && echo && docker images | awk '{print \$3}' | grep -v IMAGE | xargs -r docker rmi"
-
-# Assorted Docker aliases.
-alias drunv="docker run -d -p 8080:80 -p 8081:443 -v '\$(pwd)'/src:/var/www/html/src --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
-alias drun="docker run -d -p 8080:80 -p 8081:443 --name \$(basename \$(pwd))Instance \$(basename \$(pwd))"
-alias dlog="docker logs \$(basename \$(pwd))Instance"
-alias dstop="docker stop \$(basename \$(pwd))Instance"
-alias dstart="docker start \$(basename \$(pwd))Instance"
-alias datt="docker attach \$(basename \$(pwd))Instance" # Reattach a terminal & stdin.
-alias drs="docker restart \$(basename \$(pwd))Instance"
-alias drm="dstop && docker rm \$(basename \$(pwd))Instance"
-alias dps="docker ps -a"
-alias di="docker images"
-
-# TODO: Add a command that will docker rmi on any <none>'s in column 1 of docker images.
+# Build in the current directory.
+alias dbuild="docker build -t \$(basename \$(pwd)) \$(pwd)"
 
 # Enter a failed build container at the point it failed.
 # TODO: This doesn't run the final command yet due to xargs not coming from a tty.
-alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs -r docker commit | sed s/sha256:// | xargs -r -I % echo Run this command: docker run -it % bash -il"
+# shellcheck disable=SC2142
+alias denter="docker ps -a | awk '{print \$1}' | awk 'NR==2' | xargs docker commit | sed s/sha256:// | xargs -I % echo Run this command: docker run -it % bash -il"
 
-# Test a Lambda function in the current directory using LambCI's Docker images.
-alias lambda="docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_SESSION_TOKEN --env AWS_DEFAULT_REGION --rm -v \$(pwd):/var/task lambci/lambda:nodejs8.10 index.handler"
+# Stop and remove ALL Docker containers.
+# shellcheck disable=SC2142
+alias drmc="echo && echo 'Removing all Docker containers...' && echo && docker ps -a | awk '{print \$1}' | grep -v CONTAINER | xargs docker stop | xargs docker rm"
+
+# Remove ALL Docker images.
+# TODO: Add a command that will docker rmi on any <none>'s in column 1 of docker images.
+# shellcheck disable=SC2142
+alias drmi="echo && echo 'Removing all Docker images...' && echo && docker images | awk '{print \$3}' | grep -v IMAGE | xargs docker rmi"
 
 ##########################
 # Git
@@ -209,6 +454,7 @@ alias gcmvbc="git commit -m \"Version bump; changelog\" && gt"
 alias gco='git checkout'
 alias gcob='git checkout -b'
 alias gcom='git checkout master'
+alias gcp='git cherry-pick'
 
 alias gd='git diff'
 alias gdb='git delbranch'
@@ -217,27 +463,56 @@ alias gdc='git diff --cached'
 alias gf='git fix'
 alias gg='git grep --ignore-case'
 alias gh='git hub'
+
 alias gl='git latest'
 alias glm='gl --no-merges'
 alias glmm='glm master..'
+
 alias gm='git merge'
 
 alias gn='git noff'
 alias gnb='git newbranch'
 
 alias gp='git push'
-alias gpta='git push && git push --tags'
 alias gpf='git push --force'
 alias gpl='git pull'
 alias gpr='git pull --rebase'
+alias gpta='git push && git push --tags'
 alias gpuo='git push --set-upstream origin'
 
 alias gr='git remote --verbose'
 alias grso='git remote set-url origin'
 
 alias gs='git status'
+alias gse='git show-encrypted'
+
 alias gt='git tag'
 alias gu='git update'
+
+# TODOs without a ticket:
+alias tdt='git grep TODO | grep -v "TODO: \[OP-" | grep -v "TODO: Reference "'
+alias tdtc='tdt | wc -l'
+
+alias tempbranch='git checkout -b temp/applies && git branch | grep -v temp/applies | xargs -L 1 git merge --no-edit'
+
+##########################
+# Google Cloud
+##########################
+
+alias fb='firebase'
+alias gcl='gcloud auth application-default login'
+
+##########################
+# GPG
+##########################
+
+alias gpglk='gpg --list-keys --keyid-format short'
+
+# Given a filename with a gpg extension, decrypts it and outputs it with the same filename -
+# but without the extension.
+gpgdc() {
+  gpg --output "${1%.gpg}" --decrypt "$1"
+}
 
 ##########################
 # Gulp
@@ -258,27 +533,200 @@ alias gv='gulp version'
 # Hadolint
 ##########################
 
-alias hadolint='docker run --rm -i hadolint/hadolint < Dockerfile'
 alias dl='hadolint'
+alias hadolint='docker run --rm -i hadolint/hadolint < Dockerfile'
+
+##########################
+# Heroku
+##########################
+
+alias hl='heroku local'
+alias hlog='heroku logs --tail'
+
+##########################
+# jq
+##########################
+
+alias jqr='jq --raw-output'
+
+##########################
+# Jupyter
+##########################
+
+alias j='jupyter'
+alias jn='j notebook'
+
+##########################
+# Kubernetes
+# see also: AWS EKS
+##########################
+
+alias h='helm'
+
+alias k='kubectl'
+
+alias ka='k apply'
+alias kas='kns "${K8S_TIM_DESIRED_NAMESPACE}"'
+alias kaskp='kas && kp'
+
+alias kc='k config'
+alias kcon='kc current-context'
+alias kcp='k cp'
+
+# @see https://github.com/kubernetes/kubectl/issues/483#issuecomment-474112855
+alias kclear='sed -i.bak -e"s/^current-context:.*$/current-context:/" ~/.kube/config'
+alias kclr='kclear'
+
+alias kd='k describe'
+#alias kdash='k create --filename https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml; k create clusterrolebinding dashboard-admin --namespace kube-system --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard; kpx'
+alias kdash='kpx'
+alias kdd='kd deployments'
+alias kdel='rm ~/.kube/config'
+alias kdf='k diff'
+alias kdi='kd ingress'
+alias kdn='kd nodes'
+alias kdp='kd pods'
+alias kds='kd svc'
+alias kdtoken='kgse $(kgsa kubernetes-dashboard --namespace kube-system --output jsonpath="{.secrets[0].name}") --namespace kube-system --output jsonpath="{.data.token}" | base64 --decode | copy && echo "A Kubernetes dashboard token has been copied to your clipboard."'
+alias kdt='kdtoken'
+
+alias ke='k exec'
+
+alias kg='k get'
+alias kgcr='kg clusterroles'
+alias kgd='kg deployments'
+alias kgi='kg ingress'
+alias kgn='kg nodes'
+alias kgns='kg namespaces'
+alias kgp='kg pods'
+alias kgr='kg roles'
+alias kgs='kg services'
+alias kgsa='kg serviceaccounts'
+alias kgse='kg secrets'
+
+alias ki='kgi'
+
+alias kl='k logs'
+
+alias kn='kgn'
+alias kname='kns'
+alias knamespace='kns'
+alias kns='kc set-context --current --namespace'
+alias knw='kn --watch'
+
+alias kp='kgp'
+alias kpw='kp --watch'
+alias kpx='kdtoken && open "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/overview?namespace=main" && k proxy &'
+
+alias kr='krestart'
+
+alias ks='kgs'
+alias ksw='ks --watch'
+alias ksys='kns kube-system'
+alias ksyskp='ksys && kp'
+
+alias kt='kubetail'
+alias kuse='kc use-context'
+alias kv='k version'
+
+alias mk='minikube'
+
+kbash() {
+  ke "${1}" -it -- "${2:-bash}"
+}
+
+# Scales a deployment down to 0 and back up to what it is, effectively restarting it.
+krestart() {
+  deployment_name="${1}"
+  current_replicas="$(kgd "${deployment_name}" -o json | jq '.spec.replicas')"
+  k scale --replicas=0 deployment "${deployment_name}"
+  k scale --replicas="${current_replicas}" deployment "${deployment_name}"
+  echo && kgd "${deployment_name}"
+  echo && kp | grep "${deployment_name}"
+}
+
+##########################
+# Keybase
+##########################
+
+alias kb='keybase'
+
+##########################
+# Lambda
+##########################
+
+# Test a Lambda function in the current directory using LambCI's Docker images.
+alias lambda="docker run --env AWS_ACCESS_KEY_ID --env AWS_SECRET_ACCESS_KEY --env AWS_SESSION_TOKEN --env AWS_DEFAULT_REGION --rm -v \$(pwd):/var/task lambci/lambda:nodejs8.10 index.handler"
+
+##########################
+# Lint fixes (assorted)
+##########################
+
+alias el='DEBUG=eslint:cli-engine eslint --color --env es6:true --parser-options ecmaVersion:9 *.js'
+
+alias lf='lfj && lfs && lfp'
+
+# shellcheck disable=SC2142
+alias lfj="git ls-tree -r HEAD | grep \"\\.js$\" | awk '{print \$4}' | xargs node_modules/.bin/eslint --ignore-pattern '!.*.js' --fix"
+
+# shellcheck disable=SC2142
+alias lfs="git ls-tree -r HEAD | grep \"\\.scss$\" | awk '{print \$4}' | xargs node_modules/.bin/stylelint --fix"
+
+# shellcheck disable=SC2142
+alias lfp="git ls-tree -r HEAD | grep \"\\.php$\" | awk '{print \$4}' | xargs vendor/bin/phpcbf"
 
 ##########################
 # Make
 ##########################
 
-alias ml='make lint'
-alias mt='make test'
+alias m='make'
+alias mb='m build'
+alias mi='m init'
+alias ml='m lint'
+alias mp='m push'
+alias mr='m run'
+alias mt='m test'
+
+##########################
+# ngrok
+##########################
+
+alias ng='ngrok'
+alias ng5k='ngrok 5000'
+alias ngrok='~/ngrok http --subdomain "${NGROK_TIM_DESIRED_SUBDOMAIN}" --region au'
+
+##########################
+# Node.js
+##########################
+
+alias ni='node index.js'
 
 ##########################
 # Packer
 ##########################
 
-alias pk='packer'
 alias pb='pk build'
+alias pbc='../../build.sh .'
 
-alias pv="find *.packer.json | xargs -I % sh -c 'echo % && packer validate %'"
+alias pk='packer'
 alias pkv='pv'
 
-alias pbc='../../build.sh .'
+alias pv="find *.packer.json | xargs -I % sh -c 'echo % && packer validate %'"
+
+##########################
+# PHP
+##########################
+
+alias art='php artisan'
+
+alias p='php'
+
+##########################
+# Redis
+##########################
+
+alias red='redis-cli'
+alias redis='redis-cli'
 
 ##########################
 # Papertrail
@@ -291,10 +739,37 @@ alias pt='papertrail'
 ##########################
 
 alias pip='pip3'
+alias pl='pylint'
+alias pll='pl lambda_function.py | less'
+alias py='python'
 alias python='python3'
 
-alias pl='pylint lambda_function.py | less'
-alias py='pl'
+# Simply adds an item to requirements.txt - and sorts and removes duplicates.
+# Does not actually install it.
+pipadd(){
+  echo "${1}" >> requirements.txt
+
+  # De-dupe.
+  # @see https://stackoverflow.com/questions/9377040/remove-duplicate-entries-using-a-bash-script
+  #awk '!a[$0]++' requirements.txt # This works, but can't be redirected back to the same file.
+  perl -i -ne 'print if ! $a{$_}++' requirements.txt
+
+  cat requirements.txt
+}
+
+##########################
+# Serverless
+##########################
+
+alias sl='serverless'
+
+##########################
+# SSH
+##########################
+
+# Generates a 4096 bit RSA key with an empty passphrase, expecting a comment to be passed in.
+alias sshk='ssh-keygen -t rsa -f sshkey-"$( date +%Y%m%d-%H%M%S )" -b 4096 -P "" -C'
+alias sshkey='sshk'
 
 ##########################
 # Terminus (Pantheon CLI)
@@ -306,42 +781,72 @@ alias terminus='~/vendor/bin/terminus'
 # Terraform
 ##########################
 
+alias lnd='landscape'
+
 alias t='terraform'
-alias tf='terraform'
-alias tfv='tf version'
+alias tf='t'
 
-alias tfc='tf console'
-
-alias ta='tf apply'
-alias tfa='ta'
+alias ta='t apply'
+alias taa='echo "TERRAFORM WILL AUTO APPROVE - ARE YOU SURE?" && printf "Press any key to continue..." && read ans && ta -auto-approve'
+alias tai='tanow'
+alias tal='ta | lnd'
+alias tanow='t apply -var "apply_immediately=true"'
+alias tap='ta -parallelism=1'
 alias tat='ta -target'
-alias tft='tf taint'
-alias tanow='tf apply -var "apply_immediately=true"'
+alias tata='taa -target'
+alias tatp='tap -target'
+alias tfa='ta'
+alias tfaa='taa'
 
-alias tfim='tf import'
+alias tfc='t console'
 
-alias tfi='tf init'
-alias tfin='tf init'
-alias ti='tf init'
-alias tin='tf init'
+alias tfd='t destroy'
+alias tfdt='tfd -target'
+alias tfdaa='echo "!!! DESTROY !!! TERRAFORM WILL AUTO APPROVE THIS DESTROY - ARE YOU SURE?" && printf "Press any key to continue..." && read ans && tfd -auto-approve'
+alias tfdtaa='tfdaa -target'
 
-alias tp='tf plan'
-alias tfp='tf plan'
-alias tpo='tp -out'
-
-alias tu='tf force-unlock -force'
-alias tfunlock='tu'
-alias tv='tf validate'
-
-alias tfo='tf output'
-
-alias tflint='docker run --rm --tty --volume "$( pwd )":/data wata727/tflint --error-with-issues --quiet'
-alias tfl='tflint'
-
+alias ti='t init'
 alias tia='ti && ta'
-alias tfsm='tf state mv'
+alias tin='ti'
+alias tiu='ti -upgrade=true'
+alias tfi='ti'
+alias tfin='ti'
+alias tfim='t import'
 
-alias tfsp='tf state pull > /tmp/state && code /tmp/state'
+alias tfl='tflint'
+alias tflint='docker run --rm --tty --volume "$( pwd )":/data wata727/tflint --error-with-issues --quiet'
+
+alias tfo='t output'
+
+alias tp='t plan'
+alias tpl='tp | lnd'
+alias tpo='tp -out'
+alias tpt='tp -target'
+alias tfp='tp'
+
+alias tfr='t refresh'
+
+alias tfsl='t state list'
+alias tfsm='t state mv'
+alias tfsr='tfsrm'
+alias tfsrm='t state rm'
+alias tfss='t state show'
+
+alias tft='t taint'
+
+alias tu='t force-unlock -force'
+alias tfu='t init -upgrade'
+alias tfunlock='tu'
+
+alias tv='t validate'
+alias tval='tv'
+alias tfv='t version'
+
+tfsp() {
+  tempfile=$( mktemp )
+  t state pull > "${tempfile}"
+  code "${tempfile}"
+}
 
 ##########################
 # Travis CI CLI
@@ -358,17 +863,18 @@ alias tmo='travis monitor'
 
 alias vg='vagrant'
 
+alias vgd='vg destroy'
+alias vgdown='vgs'
+
+alias vggs='vg global-status'
+
+alias vgr='vg reload'
+
+alias vgs='vg suspend'
+
 alias vgu='vg up'
 alias vgup='vg up'
 alias vgupp='vg up --provision'
-
-alias vgs='vg suspend'
-alias vgdown='vg suspend'
-
-alias vgd='vg destroy'
-alias vgr='vg reload'
-
-alias vggs='vg global-status'
 
 ##########################
 # Webpack
@@ -385,11 +891,17 @@ alias y='yarn'
 alias ya='yarn add'
 alias yb='yarn build'
 alias ye='yarn execute'
+alias yet='yarn e2e-tests'
 alias yf='yarn fix'
+alias yit='yarn integration-tests'
 alias yl='yarn lint'
+alias ylt='yarn lint && yarn test'
 alias yp='yarn publish'
 alias yt='yarn test'
 alias yut='yarn unit-tests'
-alias yit='yarn integration-tests'
-alias yet='yarn e2e-tests'
-alias ylt='yarn lint && yarn test'
+
+##########################
+# zsh
+##########################
+
+alias u='source ~/.zshrc && echo zsh configuration reloaded'
