@@ -436,6 +436,49 @@ ak() {
 
 }
 
+funnel() {
+  cluster_name=astute-ops
+  realm_letter=o
+  aops
+  kops
+  kas
+
+  echo
+  echo "Going to tunnel to ${cluster_name}."
+
+  # @see http://www.studytrails.com/devops/kubernetes/local-dns-resolution-for-eks-with-private-endpoint/
+  echo "Getting host data..."
+  ip="$(aws ec2 describe-network-interfaces --filters Name=description,Values="Amazon EKS $cluster_name" | grep "PrivateIpAddress\"" | cut -d ":" -f 2 | sed 's/[*",]//g' | sed 's/^\s*//'| uniq | head -1 | tr -d '[:space:]')"
+  endpoint="$(aws eks describe-cluster --name "$cluster_name" | grep endpoint\" | cut -d ":" -f 3 | sed 's/[\/,"]//g')"
+
+  amfa
+
+  if ! grep $endpoint /etc/hosts > /dev/null; then
+    echo "Adding endpoint to hosts file..."
+    sudo sh -c "echo '127.0.0.1 ${endpoint}' >> /etc/hosts"
+  else
+    echo "Endpoint already in hosts file."
+  fi
+
+  echo "Tunnelling..."
+  # F = use this config file, f = send to background, N = no command, L = local forward
+  sudo ssh -F ~/.ssh/config -fNL "443:${ip}:443" "man.${realm_letter}"
+
+  echo "You're connected to ${cluster_name}."
+  echo "Run kunnel to kill the tunnel."
+  echo
+
+}
+
+kunnel() {
+  echo
+  sudo ps ax | grep ssh | grep fNL
+  sudo ps ax | grep ssh | grep fNL | cut -d " " -f 1 | xargs sudo kill
+  echo
+  echo Tunnel killed.
+  echo
+}
+
 kubernetic() {
   cluster_name="$1"
   if [ -z "${cluster_name}" ]; then echo "Please provide a cluster name."; return 0; fi
