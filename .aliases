@@ -301,6 +301,37 @@ dam() {
   sts decode-authorization-message --encoded-message "${1}" | jq '.DecodedMessage | fromjson'
 }
 
+# Compares the last two versions of an AWS SSM Parameter.
+ssmdiff() {
+
+  parameter_name="${1}"
+  data="$(aws ssm get-parameter-history --name "${parameter_name}" --with-decryption)"
+
+  current="$(echo "${data}" | jq -j ".Parameters[-1]")"
+  old="$(echo "${data}" | jq -j ".Parameters[-2]")"
+
+  current_value="$(echo "${current}" | jq ".Value | fromjson")"
+  old_value="$(echo "${old}" | jq ".Value | fromjson")"
+
+  # Print out a header with the version numbers and dates.
+  # The date are timestamps. They're stripped of their decimal points and passed to `date` (which
+  # doesn't take stdin and also doesn't strip trailing spaces).
+  echo
+  echo -n "Comparing version "
+  echo "${old}" | jq -j ".Version"
+  echo -n " ("
+  echo "${old}" | jq ".LastModifiedDate" | date_stdin -r | tr -d "\n"
+  echo -n ") and "
+  echo "${current}" | jq -j ".Version"
+  echo -n " ("
+  echo "${current}" | jq ".LastModifiedDate" | date_stdin -r | tr -d "\n"
+  echo ") of ${parameter_name}:"
+
+  echo
+  diff <(echo "${old_value}") <(echo "${current_value}") || true # We're always expecting a diff, so we don't want a non-zero exit code here.
+
+}
+
 ##########################
 # AWS EC2
 # see also: AWS
