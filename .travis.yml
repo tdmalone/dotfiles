@@ -1,14 +1,12 @@
-sudo: true
 language: generic
 
 install:
 
-  # Make sure we have a more recent version of shellcheck.
-  # @see https://github.com/koalaman/shellcheck#travis-ci
-  - scversion="v0.6.0" # or "v0.4.7", or "latest"
-  - wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
-  - sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
-  - shellcheck --version
+  # Install the latest version of Shellcheck and make it available to the shell.
+  - curl --location --fail --silent https://storage.googleapis.com/shellcheck/shellcheck-latest.linux.x86_64.tar.xz > shellcheck.tar.xz
+  - tar --xz -xvf shellcheck.tar.xz
+  - shellcheck() { "${TRAVIS_BUILD_DIR}/shellcheck-latest/shellcheck" "$@"; }
+  - export -f shellcheck
 
 script:
   - shellcheck .aliases
