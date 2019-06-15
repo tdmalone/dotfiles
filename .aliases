@@ -205,11 +205,17 @@ alias ae='ansible-vault encrypt_string --vault-id=ENTER_VAULT_NAME_HERE@prompt -
 ##########################
 
 alias alo='alogout'
-alias amfaf='aws-mfa --force'
+alias alogout='areset && unset AWS_PROFILE'
+
+alias amfa='areset && aws-mfa'
+alias amfaf='amfa --force'
 alias amp='amplify'
+
 alias asmfa='areset && aws-mfa --assume-role arn:aws:iam::${AWS_WORK_TIM_ACCOUNT_ID}:role/OrganizationAccountAccessRole --duration 43200'
 alias asu='asudo'
+
 alias aupd='rm -f ${HOME}/.zshrc_tdm_aws_context.*'
+
 alias awscs='aws configure set'
 
 alias cll='aws logs'
@@ -233,16 +239,6 @@ alias s3a='aws s3api'
 alias sns='aws sns'
 alias sqs='aws sqs'
 alias sts='aws sts'
-
-alogout() {
-  areset
-  unset AWS_PROFILE
-}
-
-amfa() {
-  areset
-  aws-mfa
-}
 
 areset() {
   unset AWS_ACCESS_KEY_ID
@@ -388,7 +384,7 @@ ak() {
   account_number="$2"
   source_profile="${AWS_TIM_DESIRED_PROFILE}"
 
-  region="${AWS_DESIRED_REGION}"
+  region="${AWS_TIM_DESIRED_REGION}"
   role_name="OrganizationAccountAccessRole"
 
   if [ -z "${cluster_name}" ]; then echo "Please provide a cluster name."; return 0; fi
@@ -456,7 +452,7 @@ alias dstart="docker start \$(basename \$(pwd))Instance"
 alias dstop="docker stop \$(basename \$(pwd))Instance"
 
 # @see https://stackoverflow.com/questions/44722341/docker-login-unknown-shorthand-flag-e
-alias daws='$(AWS_DEFAULT_REGION="${AWS_DESIRED_REGION}" ecr get-login --no-include-email)'
+alias daws='$(AWS_DEFAULT_REGION="${AWS_TIM_DESIRED_REGION}" ecr get-login --no-include-email)'
 alias dlogin="daws"
 
 # WARNING: Some of these have only been tested in Git Bash on Windows.
