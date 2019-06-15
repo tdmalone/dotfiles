@@ -81,7 +81,7 @@ alias wx='curl wttr.in/melbourne'
 # eg. echo "2019-06-15T03:57:14Z" | date_stdin -juf "%Y-%m-%dT%H:%M:%SZ"
 date_stdin() {
   read -r d
-  date "$@" "${d%.*}"
+  date "$@" "${d}"
 }
 
 # Gives a relative time
@@ -323,11 +323,11 @@ ssmdiff() {
   echo -n "Comparing version "
   echo "${old}" | jq -j ".Version"
   echo -n " ("
-  echo "${old}" | jq ".LastModifiedDate" | date_stdin -r | tr -d "\n"
+  echo "${old}" | jq ".LastModifiedDate" | sed 's/\..*//' | date_stdin -r | tr -d "\n"
   echo -n ") and "
   echo "${current}" | jq -j ".Version"
   echo -n " ("
-  echo "${current}" | jq ".LastModifiedDate" | date_stdin -r | tr -d "\n"
+  echo "${current}" | jq ".LastModifiedDate" | sed 's/\..*//' | date_stdin -r | tr -d "\n"
   echo ") of ${parameter_name}:"
 
   echo
