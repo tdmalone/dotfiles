@@ -58,9 +58,11 @@ alias psh='pwsh'
 
 alias s='sudo su -'
 alias sc='screen -rd || screen'
+alias scratch='scratchpad'
+alias scratchpad='code ~/Desktop/scratchpad'
 alias screen='screen -rd || screen'
 alias scwd='sudo su'
-alias sp='code ~/Desktop/scratchpad'
+alias sp='scratchpad'
 
 # Make sudo work with aliases. May not work properly though...
 # @see https://askubuntu.com/a/22043/421637
@@ -611,6 +613,7 @@ alias h='helm'
 alias k='kubectl'
 
 alias ka='k apply'
+alias kapi='k api-resources'
 alias kas='kns "${K8S_TIM_DESIRED_NAMESPACE}"'
 alias kaskp='kas && kp'
 
@@ -635,11 +638,14 @@ alias kds='kd svc'
 alias kdtoken='kgse $(kgsa kubernetes-dashboard --namespace kube-system --output jsonpath="{.secrets[0].name}") --namespace kube-system --output jsonpath="{.data.token}" | base64 --decode | copy && echo "A Kubernetes dashboard token has been copied to your clipboard."'
 alias kdt='kdtoken'
 
-alias ke='k exec'
+alias ke='kex'
+alias kex='k exec'
+alias ked='k edit'
 
 alias kg='k get'
 alias kgcr='kg clusterroles'
 alias kgd='kg deployments'
+alias kge='kg events'
 alias kgi='kg ingress'
 alias kgn='kg nodes'
 alias kgns='kg namespaces'
@@ -656,6 +662,7 @@ alias kl='k logs'
 alias kn='kgn'
 alias kname='kns'
 alias knamespace='kns'
+alias knkp='kn && kp'
 alias kns='kc set-context --current --namespace'
 alias knw='kn --watch'
 
@@ -890,6 +897,8 @@ alias tfdt='tfd -target'
 alias tfdaa='echo "!!! DESTROY !!! TERRAFORM WILL AUTO APPROVE THIS DESTROY - ARE YOU SURE?" && printf "Press any key to continue..." && read ans && tfd -auto-approve'
 alias tfdtaa='tfdaa -target'
 
+alias tff='tf fmt'
+
 alias ti='t init'
 alias tia='ti && ta'
 alias tin='ti'
@@ -918,6 +927,7 @@ alias tfsrm='t state rm'
 alias tfss='t state show'
 
 alias tft='t taint'
+alias tftm='tft -module'
 
 alias tu='t force-unlock -force'
 alias tfu='t init -upgrade'
