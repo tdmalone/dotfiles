@@ -40,6 +40,7 @@ alias copy='pbcopy'
 alias disk='sudo du -d1 -hx | sort -rh'
 
 alias e='exit'
+alias ecn='echo -n'
 alias ex='export'
 alias exe='chmod +x'
 
@@ -73,6 +74,49 @@ alias tracert='traceroute'
 alias x='exe'
 
 alias wx='curl wttr.in/melbourne'
+
+# Allows one to pass a an argument via stdin to 'date'
+# eg. echo "2019-06-15T03:57:14Z" | date_stdin -juf "%Y-%m-%dT%H:%M:%SZ"
+date_stdin() {
+  read d
+  date $@ ${d%.*}
+}
+
+# Gives a relative time
+relative() {
+
+  now="$(date -u +%s)"
+  then="${1}"
+
+  result="$(( now - then ))"
+
+  one_second="$(( 1 ))"
+  one_minute="$(( one_second * 60 ))"
+  one_hour="$(( one_minute * 60 ))"
+  one_day="$(( one_hour * 24 ))"
+  one_week="$(( one_day * 7 ))"
+  one_month="$(( one_day * 31 ))"
+  one_year="$(( one_day * 365 ))"
+
+  if [ "${result}" -ge "${one_year}" ]; then
+    result="$(( result / 60 / 60 / 24 / 7 / 31 / 365 ))y"
+  elif [ "${result}" -ge "${one_month}" ]; then
+    result="$(( result / 60 / 60 / 24 / 7 / 31 ))mth"
+  elif [ "${result}" -ge "${one_week}" ]; then
+    result="$(( result / 60 / 60 / 24 / 7 ))w"
+  elif [ "${result}" -ge "${one_day}" ]; then
+    result="$(( result / 60 / 60 / 24 ))d"
+  elif [ "${result}" -ge "${one_hour}" ]; then
+    result="$(( result / 60 / 60 ))h"
+  elif [ "${result}" -ge "${one_minute}" ]; then
+    result="$(( result / 60 ))m"
+  else
+    result+="s"
+  fi
+
+  echo "${result}"
+
+} # relative
 
 ##########################
 # Quick file opens
@@ -548,6 +592,7 @@ alias hlog='heroku logs --tail'
 ##########################
 
 alias jqr='jq --raw-output'
+alias jqj='jq --join-output' # like echo -n
 
 ##########################
 # Jupyter
@@ -631,6 +676,8 @@ alias kv='k version'
 
 alias mk='minikube'
 
+alias n='nodes'
+
 kbash() {
   ke "${1}" -it -- "${2:-bash}"
 }
@@ -643,6 +690,44 @@ krestart() {
   k scale --replicas="${current_replicas}" deployment "${deployment_name}"
   echo && kgd "${deployment_name}"
   echo && kp | grep "${deployment_name}"
+}
+
+nodes() {
+
+  data="$(kn --output json)"
+  count="$(echo "${data}" | jqj '.items | length')"
+
+  date_fmt="%Y-%m-%dT%H:%M:%SZ"
+
+  out=""
+  out+="NAME|IP ADDRESS|PODS|AGE|HEARTBEAT|VERSION|TYPE|ZONE|READY\n"
+  out+="====|==========|====|===|=========|=======|====|====|=====\n"
+
+  for i in {0..$((node_count - 1))}; do
+
+    node="$(echo "${data}" | jqj '.items['$i']')"
+    name="$(ecn "${node}" | jqj '.metadata.name')"
+    pod_count="$(kp --all-namespaces --output json --field-selector "spec.nodeName=${name}" | jqj '.items | length')"
+
+    age="$(ecn "${node}" | jqj '.metadata.creationTimestamp' | date_stdin -juf "${date_fmt}" "+%s")"
+    heartbeat="$(ecn "${node}" | jqj '.status.conditions[] | select(.type == "Ready").lastHeartbeatTime' | date_stdin -juf "${date_fmt}" "+%s")"
+
+    out+="$(ecn "${node}" | jqj '.status.addresses[] | select(.type == "Hostname").address')|"
+    out+="$(ecn "${node}" | jqj '.status.addresses[] | select(.type == "InternalIP").address')|"
+    out+="${pod_count}/$(ecn "${node}" | jqj '.status.capacity.pods')|"
+    out+="$(relative "${age}")|"
+    out+="$(relative "${heartbeat}")|"
+    out+="$(ecn "${node}" | jqj '.status.nodeInfo.kubeletVersion')|"
+    out+="$(ecn "${node}" | jqj '.metadata.labels["beta.kubernetes.io/instance-type"]')|"
+    out+="$(ecn "${node}" | jqj '.metadata.labels["failure-domain.beta.kubernetes.io/zone"]')|"
+    out+="$(ecn "${node}" | jqj '.status.conditions[] | select(.type == "Ready").status')|"
+
+    out+="\n"
+
+  done
+
+  echo "${out}" | column -ts "|"
+
 }
 
 ##########################
