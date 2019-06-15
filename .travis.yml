@@ -5,7 +5,7 @@ install:
 
   # Make sure we have a more recent version of shellcheck.
   # @see https://github.com/koalaman/shellcheck#travis-ci
-  - scversion="latest" # or "v0.4.7", or "latest"
+  - scversion="v0.6.0" # or "v0.4.7", or "latest"
   - wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
   - sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
   - shellcheck --version
