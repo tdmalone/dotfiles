@@ -120,6 +120,12 @@ relative() {
 
 } # relative
 
+# Runs provided command in all the subdirectories
+run_in_subs() {
+  echo
+  ls -d */ | xargs -I % bash -c "cd % && echo :: % :: && echo && $*; echo"
+}
+
 ##########################
 # Quick file opens
 ##########################
