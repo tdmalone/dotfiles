@@ -80,8 +80,8 @@ alias wx='curl wttr.in/melbourne'
 # Allows one to pass a an argument via stdin to 'date'
 # eg. echo "2019-06-15T03:57:14Z" | date_stdin -juf "%Y-%m-%dT%H:%M:%SZ"
 date_stdin() {
-  read d
-  date $@ ${d%.*}
+  read -r d
+  date "$@" "${d%.*}"
 }
 
 # Gives a relative time
@@ -120,10 +120,13 @@ relative() {
 
 } # relative
 
-# Runs provided command in all the subdirectories
+# Runs provided command in all the (direct) subdirectories, clearly printing out the directory names
+# Skips the current directory, and skips hidden directories
 run_in_subs() {
   echo
-  ls -d */ | xargs -I % bash -c "cd % && echo :: % :: && echo && $*; echo"
+  find . -type d -mindepth 1 -maxdepth 1 -not -path '*/\.*' -print0 \
+    | sort --zero-terminated --human-numeric-sort \
+    | xargs -0 -I % bash -c "cd % && echo :: % :: && echo && $*; echo"
 }
 
 ##########################
@@ -453,7 +456,7 @@ funnel() {
 
   amfa
 
-  if ! grep $endpoint /etc/hosts > /dev/null; then
+  if ! grep "${endpoint}" /etc/hosts > /dev/null; then
     echo "Adding endpoint to hosts file..."
     sudo sh -c "echo '127.0.0.1 ${endpoint}' >> /etc/hosts"
   else
@@ -786,7 +789,8 @@ nodes() {
   out+="NAME|IP ADDRESS|PODS|AGE|HEARTBEAT|VERSION|TYPE|ZONE|READY\n"
   out+="====|==========|====|===|=========|=======|====|====|=====\n"
 
-  for i in {0..$((node_count - 1))}; do
+  # shellcheck disable=SC2051 # We're writing for zsh
+  for i in {0..$((count - 1))}; do
 
     node="$(echo "${data}" | jqj '.items['$i']')"
     name="$(ecn "${node}" | jqj '.metadata.name')"
