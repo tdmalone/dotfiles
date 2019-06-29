@@ -158,9 +158,11 @@ plugins=(
 # Load oh-my-zsh.
 source "${ZSH}/oh-my-zsh.sh"
 
-# Load custom aliases and specific environment settings.
+# Load custom aliases/functions and specific environment settings.
+# Functions should generally come after aliases, in case they use specific aliases.
 source "${HOME}/.env"
 source "${HOME}/.aliases"
+source "${HOME}/.functions"
 
 # Settings added by other packages follow. Usually for shell completion.
 

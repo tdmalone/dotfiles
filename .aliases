@@ -1,13 +1,15 @@
 # shellcheck shell=bash
 
 ####################################################################################################
-# Tim's shell aliases (and functions)
+# Tim's shell aliases
 # https://github.com/tdmalone/dotfiles/blob/master/.aliases
+#
+# See also: https://github.com/tdmalone/dotfiles/blob/master/.functions
 #
 # Copyright (c) 2018-2019 Tim Malone
 # License: https://github.com/tdmalone/dotfiles/blob/master/LICENSE
 #
-# Sorted by category and then (generally) alphabetically with aliases first
+# Sorted by category and then (generally) alphabetically
 # Any sensitive information is expected to be provided by environment variables in a separate file
 #
 # DISCLAIMER:
@@ -17,7 +19,7 @@
 ####################################################################################################
 
 ####################################################################################################
-# Assorted aliases & functions
+# Assorted aliases
 ####################################################################################################
 
 ##########################
@@ -77,58 +79,6 @@ alias x='exe'
 
 alias wx='curl wttr.in/melbourne'
 
-# Allows one to pass a an argument via stdin to 'date'
-# eg. echo "2019-06-15T03:57:14Z" | date_stdin -juf "%Y-%m-%dT%H:%M:%SZ"
-date_stdin() {
-  read -r d
-  date "$@" "${d}"
-}
-
-# Gives a relative time
-relative() {
-
-  now="$(date -u +%s)"
-  then="${1}"
-
-  result="$(( now - then ))"
-
-  one_second="$(( 1 ))"
-  one_minute="$(( one_second * 60 ))"
-  one_hour="$(( one_minute * 60 ))"
-  one_day="$(( one_hour * 24 ))"
-  one_week="$(( one_day * 7 ))"
-  one_month="$(( one_day * 31 ))"
-  one_year="$(( one_day * 365 ))"
-
-  if [ "${result}" -ge "${one_year}" ]; then
-    result="$(( result / 60 / 60 / 24 / 7 / 31 / 365 ))y"
-  elif [ "${result}" -ge "${one_month}" ]; then
-    result="$(( result / 60 / 60 / 24 / 7 / 31 ))mth"
-  elif [ "${result}" -ge "${one_week}" ]; then
-    result="$(( result / 60 / 60 / 24 / 7 ))w"
-  elif [ "${result}" -ge "${one_day}" ]; then
-    result="$(( result / 60 / 60 / 24 ))d"
-  elif [ "${result}" -ge "${one_hour}" ]; then
-    result="$(( result / 60 / 60 ))h"
-  elif [ "${result}" -ge "${one_minute}" ]; then
-    result="$(( result / 60 ))m"
-  else
-    result+="s"
-  fi
-
-  echo "${result}"
-
-} # relative
-
-# Runs provided command in all the (direct) subdirectories, clearly printing out the directory names
-# Skips the current directory, and skips hidden directories
-run_in_subs() {
-  echo
-  find . -type d -mindepth 1 -maxdepth 1 -not -path '*/\.*' -print0 \
-    | sort --zero-terminated --human-numeric-sort \
-    | xargs -0 -I % bash -c "cd % && echo :: % :: && echo && $*; echo"
-}
-
 ##########################
 # Quick file opens
 ##########################
@@ -144,6 +94,8 @@ alias awsconfig='awsc'
 
 alias en='code ~/.env'
 alias envi='vi ~/.env'
+
+alias func='code ~/.functions'
 
 alias gconfig='gitc'
 alias gitc='code ~/.gitconfig'
@@ -185,21 +137,8 @@ alias book='ap'
 alias upd='updall -l'
 alias updall='apb "${TIM_WORK_HOMEDIR}/tools/tim-tools/tim-playbook.yml"'
 
-# 'Ansible grep' - usage 'ang something' - designed for use in the Astute Ansible repo only.
-ang() {
-  git grep --ignore-case "$1" | grep -v "\.sql:" | grep -v "\.js:"
-}
-
-apmv() {
-  ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible/$1 apm
-}
-
-aves() {
-  ANSIBLE_VAULT_PASSWORD_FILE=~/.ansible/$1 ansible-vault encrypt_string
-}
-
 # TODO.
-alias ad='ansible localhost -m debug -a 'var=ENTER_VAR_HERE' --vault-password-file=~/.ansible/ENTER_VAULT_PASSWORD_FILE_HERE'
+alias ad='ansible localhost -m debug -a "var=ENTER_VAR_HERE" --vault-password-file=~/.ansible/ENTER_VAULT_PASSWORD_FILE_HERE'
 alias ae='ansible-vault encrypt_string --vault-id=ENTER_VAULT_NAME_HERE@prompt --encrypt-vault-id ENTER_VAULT_NAME_HERE'
 
 ##########################
@@ -243,162 +182,12 @@ alias sns='aws sns'
 alias sqs='aws sqs'
 alias sts='aws sts'
 
-areset() {
-  unset AWS_ACCESS_KEY_ID
-  unset AWS_SECRET_ACCESS_KEY
-  unset AWS_SESSION_TOKEN
-  export AWS_PROFILE="${AWS_TIM_DESIRED_PROFILE}"
-  aupd
-}
-
-asudo() {
-
-  ACCOUNT_NUMBER="${1:-}"
-  ACCOUNT_FRIENDLY_NAME="${2:-}"
-  ROLE_NAME="${3:-OrganizationAccountAccessRole}"
-
-  if [ -z "${ACCOUNT_NUMBER}" ]; then ACCOUNT_NUMBER="${AWS_WORK_TIM_ACCOUNT_ID}"; fi
-
-  amfa
-
-  if [ -z "${ACCOUNT_FRIENDLY_NAME}" ]; then ACCOUNT_FRIENDLY_NAME="${ACCOUNT_NUMBER}"; fi
-  PROFILE_NAME="${AWS_PROFILE}-${ACCOUNT_FRIENDLY_NAME}"
-
-  echo "Assuming role..."
-  CREDS="$(awsar "${ROLE_NAME}" "${ACCOUNT_NUMBER}" "silent")"
-
-  awscs aws_access_key_id "$(echo "${CREDS}" | jqr .Credentials.AccessKeyId)" --profile "${PROFILE_NAME}"
-  awscs aws_secret_access_key "$(echo "${CREDS}" | jqr .Credentials.SecretAccessKey)" --profile "${PROFILE_NAME}"
-  awscs aws_session_token "$(echo "${CREDS}" | jqr .Credentials.SessionToken)" --profile "${PROFILE_NAME}"
-  awscs expiration "$(echo "${CREDS}" | jqr .Credentials.Expiration | sed -e 's/T/ /' -e 's/Z/ /')" --profile "${PROFILE_NAME}"
-
-  export AWS_PROFILE="${PROFILE_NAME}"
-
-  echo
-  echo -n "Using: " && echo "${CREDS}" | jqr .AssumedRoleUser.Arn
-  echo -n "Until: " && echo "${CREDS}" | jqr .Credentials.Expiration
-
-} # asudo
-
-awsar() {
-
-  ROLE_NAME="${1}"
-  ACCOUNT_NUMBER="${2:-}"
-  MODE="${3:-}"
-
-  if [ -z "${ACCOUNT_NUMBER}" ]; then ACCOUNT_NUMBER="${AWS_WORK_MASTER_ACCOUNT_ID}"; fi
-
-  # TODO: Remove hyphens in account number (to make it easier to copy from a hyphen'ed display).
-  # TODO: Accept aliases and map them to account numbers, probably stored in env vars?
-
-  if [ "${MODE}" != "silent" ]; then
-    echo
-    echo "Assuming ${ROLE_NAME} in ${ACCOUNT_NUMBER}..."
-  fi
-
-  sts assume-role --role-arn "arn:aws:iam::${ACCOUNT_NUMBER}:role/${ROLE_NAME}" --role-session-name "$(whoami)"
-
-}
-
-dam() {
-  sts decode-authorization-message --encoded-message "${1}" | jq '.DecodedMessage | fromjson'
-}
-
-# Compares the last two versions of an AWS SSM Parameter.
-ssmdiff() {
-
-  parameter_name="${1}"
-  data="$(aws ssm get-parameter-history --name "${parameter_name}" --with-decryption)"
-
-  current="$(echo "${data}" | jq -j ".Parameters[-1]")"
-  old="$(echo "${data}" | jq -j ".Parameters[-2]")"
-
-  current_value="$(echo "${current}" | jq ".Value | fromjson")"
-  old_value="$(echo "${old}" | jq ".Value | fromjson")"
-
-  # Print out a header with the version numbers and dates.
-  # The date are timestamps. They're stripped of their decimal points and passed to `date` (which
-  # doesn't take stdin and also doesn't strip trailing spaces).
-  echo
-  echo -n "Comparing version "
-  echo "${old}" | jq -j ".Version"
-  echo -n " ("
-  echo "${old}" | jq ".LastModifiedDate" | sed 's/\..*//' | date_stdin -r | tr -d "\n"
-  echo -n ") and "
-  echo "${current}" | jq -j ".Version"
-  echo -n " ("
-  echo "${current}" | jq ".LastModifiedDate" | sed 's/\..*//' | date_stdin -r | tr -d "\n"
-  echo ") of ${parameter_name}:"
-
-  echo
-  diff <(echo "${old_value}") <(echo "${current_value}") || true # We're always expecting a diff, so we don't want a non-zero exit code here.
-
-}
-
 ##########################
 # AWS EC2
 # see also: AWS
 ##########################
 
 alias ec2='aws ec2'
-
-# TODO: Ignore terminated instances.
-instance_id() {
-
-  # Replaces dots with dashes to match our instance Name tags.
-  INSTANCE_NAME="${1//./-}"
-
-  ec2 describe-instances --filters "Name=tag:Name,Values=${INSTANCE_NAME}" | jqr ".Reservations[0].Instances[0].InstanceId"
-}
-
-# Outputs available marketplace-listed (aka second-hand) reserved instances to JSON.
-# May take some time to gather data from the EC2 API.
-#
-# https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-reserved-instances-offerings.html
-# Might be useful? https://github.com/TerbiumLabs/check-reserved-instances
-#
-# Note that, if nothing else, 'no up-front' convertible one year RIs are pretty much a no-brainer!
-# (probably won't find them on the marketplace though, right?)
-#
-# Also note: the 'reserved instance saving' correlates with how much the instance will have to be
-# running to benefit from that saving. eg. a 41% saving? The instance has to be running at least
-# 59% of the time to break even! This means under some circumstances you _can_ still reserve a
-# part-time instance.
-reserved_instances() {
-
-  months="${1:-1}" # Default to 1 month if not provided (1 month is the minimum).
-  filename="$( mktemp )"
-
-  one_day="$((60 * 60 * 24))"
-  one_month="$((one_day * 30))"
-
-  ec2 describe-reserved-instances-offerings --product-description "Linux/UNIX" --filters "Name=marketplace,Values=true" --filters "Name=duration,Values=$(( one_month * months ))" > "${filename}"
-
-  # TODO: Include an option for adding the AZ filter '--filters Name=availability-zone,Values=a'?
-
-  code "${filename}"
-
-}
-
-snapshot() {
-  ec2 create-snapshot --volume-id "$( volume_id "${1}" )"
-}
-
-start_instance() {
-  ec2 start-instances --instance-ids "$( instance_id "${1}" )"
-}
-
-stop_instance() {
-  ec2 stop-instances --instance-ids "$( instance_id "${1}" )"
-}
-
-volume_id() {
-
-  # Replaces dots with dashes to match our instance Name tags.
-  VOLUME_NAME="${1//./-}"
-
-  ec2 describe-volumes --filters "Name=tag:Name,Values=${VOLUME_NAME}" | jqr ".Volumes[0].VolumeId"
-}
 
 ##########################
 # AWS EKS
@@ -411,83 +200,6 @@ alias eksc='eksctl'
 
 alias kaws='ak'
 alias kaws2='kubernetic && kuse kubernetic'
-
-ak() {
-
-  cluster_name="$1"
-  account_number="$2"
-  source_profile="${AWS_TIM_DESIRED_PROFILE}"
-
-  region="${AWS_TIM_DESIRED_REGION}"
-  role_name="OrganizationAccountAccessRole"
-
-  if [ -z "${cluster_name}" ]; then echo "Please provide a cluster name."; return 0; fi
-  if [ -z "${account_number}" ]; then echo "Please provide an AWS account number."; return 0; fi
-
-  cluster_arn="arn:aws:eks:${region}:${account_number}:cluster/${cluster_name}"
-  role_arn="arn:aws:iam::${account_number}:role/${role_name}"
-  profile_name="ak-${cluster_name}"
-
-  awscs region "${region}"                 --profile "${profile_name}"
-  awscs role_arn "${role_arn}"             --profile "${profile_name}"
-  awscs source_profile "${source_profile}" --profile "${profile_name}"
-
-  eks update-kubeconfig --name "${cluster_name}" --profile "${profile_name}"
-
-  kc unset "contexts.${cluster_name}"
-  kc rename-context "${cluster_arn}" "${cluster_name}"
-
-}
-
-funnel() {
-  cluster_name=astute-ops
-  realm_letter=o
-  aops
-  kops
-  kas
-
-  echo
-  echo "Going to tunnel to ${cluster_name}."
-
-  # @see http://www.studytrails.com/devops/kubernetes/local-dns-resolution-for-eks-with-private-endpoint/
-  echo "Getting host data..."
-  ip="$(aws ec2 describe-network-interfaces --filters Name=description,Values="Amazon EKS $cluster_name" | grep "PrivateIpAddress\"" | cut -d ":" -f 2 | sed 's/[*",]//g' | sed 's/^\s*//'| uniq | head -1 | tr -d '[:space:]')"
-  endpoint="$(aws eks describe-cluster --name "$cluster_name" | grep endpoint\" | cut -d ":" -f 3 | sed 's/[\/,"]//g')"
-
-  amfa
-
-  if ! grep "${endpoint}" /etc/hosts > /dev/null; then
-    echo "Adding endpoint to hosts file..."
-    sudo sh -c "echo '127.0.0.1 ${endpoint}' >> /etc/hosts"
-  else
-    echo "Endpoint already in hosts file."
-  fi
-
-  echo "Tunnelling..."
-  # F = use this config file, f = send to background, N = no command, L = local forward
-  sudo ssh -F ~/.ssh/config -fNL "443:${ip}:443" "man.${realm_letter}"
-
-  echo "You're connected to ${cluster_name}."
-  echo "Run kunnel to kill the tunnel."
-  echo
-
-}
-
-kunnel() {
-  echo
-  sudo ps ax | grep ssh | grep fNL
-  sudo ps ax | grep ssh | grep fNL | cut -d " " -f 1 | xargs sudo kill
-  echo
-  echo Tunnel killed.
-  echo
-}
-
-kubernetic() {
-  cluster_name="$1"
-  if [ -z "${cluster_name}" ]; then echo "Please provide a cluster name."; return 0; fi
-  token="$(aws-iam-authenticator token --cluster-id "${cluster_name}" | jqr ".status.token")"
-  kc set-credentials kubernetic --token="${token}"
-}
 
 ##########################
 # Azure
@@ -633,12 +345,6 @@ alias gcl='gcloud auth application-default login'
 
 alias gpglk='gpg --list-keys --keyid-format short'
 
-# Given a filename with a gpg extension, decrypts it and outputs it with the same filename -
-# but without the extension.
-gpgdc() {
-  gpg --output "${1%.gpg}" --decrypt "$1"
-}
-
 ##########################
 # Gulp
 ##########################
@@ -759,63 +465,11 @@ alias ksyskp='ksys && kp'
 alias kt='kubetail'
 alias kuse='kc use-context'
 alias kv='k version'
+alias kvs='kv --short'
 
 alias mk='minikube'
 
 alias n='nodes'
-
-kbash() {
-  ke "${1}" -it -- "${2:-bash}"
-}
-
-# Scales a deployment down to 0 and back up to what it is, effectively restarting it.
-krestart() {
-  deployment_name="${1}"
-  current_replicas="$(kgd "${deployment_name}" -o json | jq '.spec.replicas')"
-  k scale --replicas=0 deployment "${deployment_name}"
-  k scale --replicas="${current_replicas}" deployment "${deployment_name}"
-  echo && kgd "${deployment_name}"
-  echo && kp | grep "${deployment_name}"
-}
-
-nodes() {
-
-  data="$(kn --output json)"
-  count="$(echo "${data}" | jqj '.items | length')"
-
-  date_fmt="%Y-%m-%dT%H:%M:%SZ"
-
-  out=""
-  out+="NAME|IP ADDRESS|PODS|AGE|HEARTBEAT|VERSION|TYPE|ZONE|READY\n"
-  out+="====|==========|====|===|=========|=======|====|====|=====\n"
-
-  # shellcheck disable=SC2051 # We're writing for zsh
-  for i in {0..$((count - 1))}; do
-
-    node="$(echo "${data}" | jqj '.items['$i']')"
-    name="$(ecn "${node}" | jqj '.metadata.name')"
-    pod_count="$(kp --all-namespaces --output json --field-selector "spec.nodeName=${name}" | jqj '.items | length')"
-
-    age="$(ecn "${node}" | jqj '.metadata.creationTimestamp' | date_stdin -juf "${date_fmt}" "+%s")"
-    heartbeat="$(ecn "${node}" | jqj '.status.conditions[] | select(.type == "Ready").lastHeartbeatTime' | date_stdin -juf "${date_fmt}" "+%s")"
-
-    out+="$(ecn "${node}" | jqj '.status.addresses[] | select(.type == "Hostname").address')|"
-    out+="$(ecn "${node}" | jqj '.status.addresses[] | select(.type == "InternalIP").address')|"
-    out+="${pod_count}/$(ecn "${node}" | jqj '.status.capacity.pods')|"
-    out+="$(relative "${age}")|"
-    out+="$(relative "${heartbeat}")|"
-    out+="$(ecn "${node}" | jqj '.status.nodeInfo.kubeletVersion')|"
-    out+="$(ecn "${node}" | jqj '.metadata.labels["beta.kubernetes.io/instance-type"]')|"
-    out+="$(ecn "${node}" | jqj '.metadata.labels["failure-domain.beta.kubernetes.io/zone"]')|"
-    out+="$(ecn "${node}" | jqj '.status.conditions[] | select(.type == "Ready").status')|"
-
-    out+="\n"
-
-  done
-
-  echo "${out}" | column -ts "|"
-
-}
 
 ##########################
 # Keybase
@@ -916,19 +570,6 @@ alias pll='pl lambda_function.py | less'
 alias py='python'
 alias python='python3'
 
-# Simply adds an item to requirements.txt - and sorts and removes duplicates.
-# Does not actually install it.
-pipadd(){
-  echo "${1}" >> requirements.txt
-
-  # De-dupe.
-  # @see https://stackoverflow.com/questions/9377040/remove-duplicate-entries-using-a-bash-script
-  #awk '!a[$0]++' requirements.txt # This works, but can't be redirected back to the same file.
-  perl -i -ne 'print if ! $a{$_}++' requirements.txt
-
-  cat requirements.txt
-}
-
 ##########################
 # Serverless
 ##########################
@@ -1016,12 +657,6 @@ alias tfunlock='tu'
 alias tv='t validate'
 alias tval='tv'
 alias tfv='t version'
-
-tfsp() {
-  tempfile=$( mktemp )
-  t state pull > "${tempfile}"
-  code "${tempfile}"
-}
 
 ##########################
 # Travis CI CLI
