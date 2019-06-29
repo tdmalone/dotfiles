@@ -35,8 +35,8 @@
 alias c='cls'
 alias calc='echo "Enter your maths equations, or type \"quit\" to exit." && bc --quiet'
 alias cls='clear'
-#alias conn='ping 61.88.88.88'
-alias conn='ping google.com'
+alias conn='ping 61.88.88.88'
+#alias conn='ping google.com'
 alias copy='pbcopy'
 
 alias disk='sudo du -d1 -hx | sort -rh'
@@ -398,7 +398,7 @@ alias h='helm'
 alias k='kubectl'
 
 alias ka='k apply'
-alias kapi='k api-resources'
+alias kapi='k api-resources | sort'
 alias kas='kns "${K8S_TIM_DESIRED_NAMESPACE}"'
 alias kaskp='kas && kp'
 
@@ -452,6 +452,8 @@ alias kns='kc set-context --current --namespace'
 alias knw='kn --watch'
 
 alias kp='kgp'
+alias kpal='kp --all-namespaces'
+alias kpan='kpal'
 alias kpw='kp --watch'
 alias kpx='kdtoken && open "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/overview?namespace=main" && k proxy &'
 
