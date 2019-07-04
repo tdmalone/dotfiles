@@ -260,6 +260,10 @@ stop_instance() {
   ec2 stop-instances --instance-ids "$( instance_id "${1}" )"
 }
 
+terminate_instance() {
+  ec2 terminate-instances --instance-ids "$( instance_id "${1}" )"
+}
+
 volume_id() {
 
   # Replaces dots with dashes to match our instance Name tags.

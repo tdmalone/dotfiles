@@ -58,6 +58,8 @@ alias ll='ls -alFA'
 alias powershell='pwsh'
 alias psh='pwsh'
 
+alias rec='asciinema rec'
+
 alias s='sudo su -'
 alias sc='screen -rd || screen'
 alias scratch='scratchpad'
@@ -181,6 +183,8 @@ alias s3a='aws s3api'
 alias sns='aws sns'
 alias sqs='aws sqs'
 alias sts='aws sts'
+
+alias term_instance='terminate_instance'
 
 ##########################
 # AWS EC2
@@ -411,7 +415,7 @@ alias kclear='sed -i.bak -e"s/^current-context:.*$/current-context:/" ~/.kube/co
 alias kclr='kclear'
 
 alias kd='k describe'
-#alias kdash='k create --filename https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml; k create clusterrolebinding dashboard-admin --namespace kube-system --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard; kpx'
+#alias kdash='k create --filename https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml; k create clusterrolebinding dashboard-admin --namespace monitoring --clusterrole=cluster-admin --serviceaccount=monitoring:dashboard; kpx'
 alias kdash='kpx'
 alias kdd='kd deployments'
 alias kdel='rm ~/.kube/config'
@@ -420,7 +424,7 @@ alias kdi='kd ingress'
 alias kdn='kd nodes'
 alias kdp='kd pods'
 alias kds='kd svc'
-alias kdtoken='kgse $(kgsa kubernetes-dashboard --namespace kube-system --output jsonpath="{.secrets[0].name}") --namespace kube-system --output jsonpath="{.data.token}" | base64 --decode | copy && echo "A Kubernetes dashboard token has been copied to your clipboard."'
+alias kdtoken='kgse $(kgsa dashboard --namespace monitoring --output jsonpath="{.secrets[0].name}") --namespace monitoring --output jsonpath="{.data.token}" | base64 --decode | copy && echo "A Kubernetes dashboard token has been copied to your clipboard."'
 alias kdt='kdtoken'
 
 alias ke='kex'
@@ -430,6 +434,7 @@ alias ked='k edit'
 alias kg='k get'
 alias kgcr='kg clusterroles'
 alias kgd='kg deployments'
+alias kgds='kg daemonsets'
 alias kge='kg events'
 alias kgi='kg ingress'
 alias kgn='kg nodes'
@@ -440,9 +445,15 @@ alias kgs='kg services'
 alias kgsa='kg serviceaccounts'
 alias kgse='kg secrets'
 
+alias khp='kg hpa'
+alias khpa='khp'
+alias khpaw='khpw'
+alias khpw='khp --watch'
+
 alias ki='kgi'
 
 alias kl='k logs'
+alias klo='kclear'
 
 alias kn='kgn'
 alias kname='kns'
@@ -455,7 +466,7 @@ alias kp='kgp'
 alias kpal='kp --all-namespaces'
 alias kpan='kpal'
 alias kpw='kp --watch'
-alias kpx='kdtoken && open "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/overview?namespace=main" && k proxy &'
+alias kpx='kdtoken && open "http://localhost:8001/api/v1/namespaces/monitoring/services/https:dashboard:/proxy/#!/overview?namespace=main" && k proxy &'
 
 alias kr='krestart'
 
