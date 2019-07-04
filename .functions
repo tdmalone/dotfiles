@@ -425,37 +425,58 @@ kupgrade() {
 
 }
 
+# Prints out a nice list of nodes with all their pertinent data in columns.
+#
+# WARNING: This makes use of 'kubectl describe', due to deficiencies in the amount of data available
+# through 'kubectl get'. 'describe' does not have a machine-readable output option, so it's possible
+# the implementation could change in later releases.
 nodes() {
 
-  data="$(kn --output json)"
-  count="$(echo "${data}" | jqj '.items | length')"
+  get_data="$(kn --output json)" # This is easily parsable.
+  describe_data="$(kdn)"         # This contains much more detail but is NOT easily parsable.
+
+  node_count="$(echo "${get_data}" | jqj '.items | length')"
 
   date_fmt="%Y-%m-%dT%H:%M:%SZ"
 
   out=""
-  out+="NAME|IP ADDRESS|PODS|AGE|HEARTBEAT|VERSION|TYPE|ZONE|READY|TAINTS\n"
-  out+="====|==========|====|===|=========|=======|====|====|=====|======\n"
+  out+="NAME         |IP ADDRESS|ALLOC. CPU  |ALLOC. MEM   |PODS   |AGE|H/BEAT|VERSION|INSTANCE|AZ|READY|TAINTS\n"
+  out+="=============|==========|============|=============|=======|===|======|=======|========|==|=====|======\n"
 
   # shellcheck disable=SC2051 # We're writing for zsh
-  for i in {0..$((count - 1))}; do
+  for i in {0..$((node_count - 1))}; do
 
-    node="$(echo "${data}" | jqj '.items['$i']')"
-    name="$(ecn "${node}" | jqj '.metadata.name')"
-    pod_count="$(kp --all-namespaces --output json --field-selector "spec.nodeName=${name}" | jqj '.items | length')"
+    node_data="$(echo "${get_data}" | jqj '.items['$i']')"
+    node_name="$(ecn "${node_data}" | jqj '.metadata.name')"
 
-    age="$(ecn "${node}" | jqj '.metadata.creationTimestamp' | date_stdin -juf "${date_fmt}" "+%s")"
-    heartbeat="$(ecn "${node}" | jqj '.status.conditions[] | select(.type == "Ready").lastHeartbeatTime' | date_stdin -juf "${date_fmt}" "+%s")"
+    extended_node_data="$(echo "${describe_data}" | sed -En "/Name:[[:space:]]+${node_name}/,/^$/p" )"
+    allocated_resources="$(echo "${extended_node_data}" | grep -A7 "Allocated resources:")"
 
-    out+="$(ecn "${node}" | jqj '.status.addresses[] | select(.type == "Hostname").address')|"
-    out+="$(ecn "${node}" | jqj '.status.addresses[] | select(.type == "InternalIP").address')|"
-    out+="${pod_count}/$(ecn "${node}" | jqj '.status.capacity.pods')|"
-    out+="$(relative "${age}")|"
-    out+="$(relative "${heartbeat}")|"
-    out+="$(ecn "${node}" | jqj '.status.nodeInfo.kubeletVersion')|"
-    out+="$(ecn "${node}" | jqj '.metadata.labels["beta.kubernetes.io/instance-type"]')|"
-    out+="$(ecn "${node}" | jqj '.metadata.labels["failure-domain.beta.kubernetes.io/zone"]')|"
-    out+="$(ecn "${node}" | jqj '.status.conditions[] | select(.type == "Ready").status')|"
-    out+="$(ecn "${node}" | jqj '.spec.taints[]?.effect')|"
+    pod_count="$(echo "${extended_node_data}" | grep "Non-terminated Pods:" | awk '{print $3}' | sed 's/[^0-9]//g')"
+
+    cpu_allocated_percent="$(echo "${allocated_resources}" | grep cpu | awk '{print $3}' | sed 's/[^0-9%]//g')"
+    mem_allocated_percent="$(echo "${allocated_resources}" | grep memory | awk '{print $3}' | sed 's/[^0-9%]//g')"
+
+    age="$(ecn "${node_data}" | jqj '.metadata.creationTimestamp' | date_stdin -juf "${date_fmt}" "+%s")"
+    heartbeat="$(ecn "${node_data}" | jqj '.status.conditions[] | select(.type == "Ready").lastHeartbeatTime' | date_stdin -juf "${date_fmt}" "+%s")"
+    mem_kb="$(ecn "${node_data}" | jqj '.status.capacity.memory' | sed 's/[^0-9]//g')"
+    mem_mb="$(( mem_kb / 1024 ))"
+
+    age_relative="$(relative "${age}")"
+    heartbeat_relative="$(relative "${heartbeat}")"
+
+    out+="$(ecn "${node_data}" | jqj '.status.addresses[] | select(.type == "Hostname").address')|"
+    out+="$(ecn "${node_data}" | jqj '.status.addresses[] | select(.type == "InternalIP").address')|"
+    out+="${cpu_allocated_percent} / $(ecn "${node_data}" | jqj '.status.capacity.cpu') vCPU|"
+    out+="${(l:3:)mem_allocated_percent} / ${mem_mb} MB|"
+    out+="${(l:2:)pod_count} / $(ecn "${node_data}" | jqj '.status.capacity.pods')|"
+    out+="${(l:3:)age_relative}|"
+    out+="${(l:3:)heartbeat_relative}|"
+    out+="$(ecn "${node_data}" | jqj '.status.nodeInfo.kubeletVersion')|"
+    out+="$(ecn "${node_data}" | jqj '.metadata.labels["beta.kubernetes.io/instance-type"]')|"
+    out+="$(ecn "${node_data}" | jqj '.metadata.labels["failure-domain.beta.kubernetes.io/zone"]' | sed 's/.*\(.\)/\1/')|"
+    out+="$(ecn "${node_data}" | jqj '.status.conditions[] | select(.type == "Ready").status')|"
+    out+="$(ecn "${node_data}" | jqj '.spec.taints[]?.effect')|"
     out+="\n"
 
   done
