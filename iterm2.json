@@ -1,10 +1,6 @@
 {
   "Badge Text" : "",
-  "Ansi 5 Color" : {
-    "Green Component" : 0,
-    "Red Component" : 0.73333334922790527,
-    "Blue Component" : 0.73333334922790527
-  },
+  "Thin Strokes" : 4,
   "Working Directory" : "\/Users\/tim",
   "Prompt Before Closing 2" : false,
   "Selected Text Color" : {
@@ -63,6 +59,7 @@
   ],
   "Scrollback With Status Bar" : true,
   "Scrollback Lines" : 0,
+  "Draw Powerline Glyphs" : true,
   "Prevent Opening in a Tab" : false,
   "Flashing Bell" : true,
   "BM Growl" : true,
@@ -308,7 +305,7 @@
   },
   "Name" : "Tim",
   "Blinking Cursor" : false,
-  "Guid" : "4CF79045-48D6-40E4-A8F7-7FBA282C8A47",
+  "Guid" : "A1B000A5-8CEB-45EE-A2A2-375E922D629E",
   "Idle Code" : 0,
   "Ansi 10 Color" : {
     "Red Component" : 0.40108524030074477,
@@ -324,8 +321,7 @@
   },
   "Smart Cursor Color" : true,
   "Ambiguous Double Width" : false,
-  "Blur Radius" : 30,
-  "Cursor Type" : 2,
+  "Blur Radius" : 20.491846742021277,
   "Ansi 0 Color" : {
     "Red Component" : 0,
     "Color Space" : "sRGB",
@@ -333,11 +329,12 @@
     "Alpha Component" : 1,
     "Green Component" : 0
   },
+  "Cursor Type" : 2,
   "AWDS Pane Directory" : "",
   "Blur" : true,
-  "Normal Font" : "SourceCodeProForPowerline-Regular 12",
+  "Normal Font" : "MesloLGS-NF-Regular 12",
   "Vertical Spacing" : 1,
-  "Session Close Undo Timeout" : 10,
+  "Session Close Undo Timeout" : 60,
   "Ansi 7 Color" : {
     "Red Component" : 0.77215576171875,
     "Color Space" : "sRGB",
@@ -370,7 +367,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.84967301861201094
   },
-  "Transparency" : 0,
+  "Transparency" : 0.10242686170212767,
   "Background Color" : {
     "Red Component" : 0.925872802734375,
     "Color Space" : "sRGB",
@@ -388,7 +385,11 @@
   },
   "Columns" : 80,
   "Visual Bell" : true,
+  "Custom Directory" : "Recycle",
   "ASCII Ligatures" : false,
-  "Thin Strokes" : 4,
-  "Custom Directory" : "Recycle"
+  "Ansi 5 Color" : {
+    "Green Component" : 0,
+    "Red Component" : 0.73333334922790527,
+    "Blue Component" : 0.73333334922790527
+  }
 }
