@@ -789,7 +789,7 @@ alias tfim='t import'
 
 alias tfl='tflint'
 #alias tflint='docker run --rm --tty --volume "$( pwd )":/data wata727/tflint --error-with-issues --quiet'
-alias tflint="find . -name '*.tf' | sed 's/^\.\(.*\)\/\(.*\)\.tf$/.\1/' | sed 's/^\///' | sort | uniq | grep -v '/modules/' | xargs -I % bash -c 'echo % && cd % && tflint --deep --module'"
+#alias tflint="find . -name '*.tf' | sed 's/^\.\(.*\)\/\(.*\)\.tf$/.\1/' | sed 's/^\///' | sort | uniq | grep -v '/modules/' | xargs -I % bash -c 'echo % && cd % && tflint --deep --module'"
 
 alias tfo='t output'
 alias to='tfo'

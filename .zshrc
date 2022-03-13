@@ -205,7 +205,7 @@ complete -o nospace -C /usr/local/bin/vault vault
 complete -o nospace -C /usr/local/bin/terraform terraform
 
 # ecctl
-source <(ecctl generate completions)
+#source <(ecctl generate completions)
 
 # AWS CLI
 complete -C '/usr/local/bin/aws_completer' aws
@@ -226,8 +226,8 @@ fi
 # PS1='$(kube_ps1) %~ # '
 
 # pyenv
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+#eval "$(pyenv init -)"
+#eval "$(pyenv virtualenv-init -)"
 PATH="/usr/local/bin:$PATH"
 
 # AWS CLI pager disable
