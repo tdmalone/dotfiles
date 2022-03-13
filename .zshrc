@@ -234,3 +234,4 @@ PATH="/usr/local/bin:$PATH"
 export AWS_PAGER=
 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
