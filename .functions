@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # shellcheck shell=bash
 
 ####################################################################################################
@@ -18,6 +19,11 @@
 # third-party tools fairly up-to-date. Your mileage may vary on different platforms and versions.
 ####################################################################################################
 
+red="\\033[00;31m"
+olive="\\033[00;33m"
+blue="\\033[00;36m"
+normal="\\033[0m"
+
 ####################################################################################################
 # Assorted functions
 ####################################################################################################
@@ -34,7 +40,7 @@
 
 # Make sudo work with aliases. May not work properly though...
 # @see https://askubuntu.com/a/22043/421637
-#
+
 # Allows one to pass a an argument via stdin to 'date'
 # eg. echo "2019-06-15T03:57:14Z" | date_stdin -juf "%Y-%m-%dT%H:%M:%SZ"
 date_stdin() {
