@@ -27,6 +27,7 @@
 # New unsorted
 ##########################
 
+alias code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 alias cfnl='cfn-lint **/*.yaml'
 
 alias sectriage="sed -e 's/[A-Z]/+/g' -e 's/^\+/scale=2; (/' -e 's/$/)\/16/' | bc --mathlib"
