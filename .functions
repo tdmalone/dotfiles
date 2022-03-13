@@ -34,6 +34,103 @@ normal="\\033[0m"
 
 # ...
 
+composer216() {
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+  php composer-setup.php
+  php -r "unlink('composer-setup.php');"
+}
+
+tpview() {
+  tf="$(mktemp)"
+  echo "Generating Terraform plan and opening in code editor, one moment..."
+  echo "(file will be at ${tf}.txt)..."
+  tplfo "${tf}" "$@" > /dev/null
+  tpclean "${tf}"
+  sed -i .bak '1s/^/'"$(pwd | sed 's/\//\\\//g')"'\n/' "${tf}.txt" # Add CWD to first line of file
+  code "${tf}.txt"
+}
+
+# Same as above except with targetting...
+tpviewtarget() {
+  target="${1}"
+  tf="$(mktemp)"
+  echo "Generating Terraform plan for '${target}' and opening in code editor, one moment..."
+  echo "(file will be at ${tf}.txt)..."
+  tplfo "${tf}" "$@" > /dev/null
+  tpclean "${tf}"
+  sed -i .bak '1s/^/'"$(pwd | sed 's/\//\\\//g')"'\n/' "${tf}.txt" # Add CWD to first line of file
+  code "${tf}.txt"
+}
+
+tpclean() {
+  filename="${1}.txt"
+  tfsnc "${1}" > "${filename}"
+  cp "${filename}" "${filename}.bak"
+
+  perl -0pe 's/.*\(known after apply\)\n//g' -i "${filename}"
+  perl -0pe 's/\[\n\s+.? "(.*?)",\n\s+\]\n/\["$1"\]\n/g' -i "${filename}"
+  perl -0pe 's/\{\n\s+.? "(.*?)" = "(.*?)"\n\s+\}\n/{"$1" = "$2"}\n/g' -i "${filename}"
+  perl -0pe 's/\n\s+[a-z].*\s+= \[\n[^\]]+\]//g' -i "${filename}"
+  perl -0pe 's/\n\s+[a-z].*\s+= \{\n[^\}]+\}//g' -i "${filename}"
+  perl -0pe 's/\n\s+[a-z].*//g' -i "${filename}"
+}
+
+read_app_queue() {
+  sqs_message="$1"
+  job_data="$(echo "${sqs_message}" | base64 --decode | jq --raw-output '.body' | base64 --decode)"
+  job_data="$(echo "${job_data}" | sed 's/\\/\/\//g')" # Replace \ with // so it doesn't become a broken escape.
+  echo
+  echo -n "portal_id: " && echo "${job_data}" | jq --raw-output '.kwargs.portal_id'
+  echo -n "job_name:  " && echo "${job_data}" | jq --raw-output '.kwargs.job_name'
+  echo "${job_data}" | jq .
+}
+
+# Cleans up all the annoying '* 2.*' etc. files that iCloud sticks everywhere.
+icloud_clean() {
+  for i in $(seq 2 15); do
+    find . -name '* '"$i"'*' -print -delete
+  done
+  find . -name '*.icloud' -print -delete
+}
+
+pull_all() ( # Run in a sub-shell so 'set -e' doesn't kill the main shell
+  set -euo pipefail
+
+  repos=(ace ace-connector admin ansible api-proxy bamboo canopener eve lambdaland terraform tools)
+
+  cd "${HOME}/astute"
+  for repo in ${repos[@]}; do
+    echo
+    cd "${repo}"
+    echo "${repo}"
+    git stash
+    git branch
+    gco master
+    gpl
+    git delmerged
+    cd ..
+  done
+)
+
+tc() {
+  touch "$1"
+  code "$1"
+}
+
+# Removes multiple blank lines at the end of a file
+remove_multiple_blanks() {
+  find . -type f -name '*.tf' -exec sed -i '' -e :a -e '/^\n*$/{$d;N;};/\n$/ba' {} \;
+}
+
+tighten_empty_blocks() {
+  find . -type f -name '*.tf' | xargs -I % bash -c "sed -e ':a' -e 'N' -e '\$!ba' -e 's/{\n}/{}/g' % > tmp && mv tmp %"
+}
+
+function x509exp(){ openssl x509 -noout -enddate -in $1 | sed -e 's/.*=//' }
+function x509fp(){ openssl x509 -noout -fingerprint -in $1 | sed -e 's/.*=//' -e 's/://g' }
+function x509s(){ openssl x509 -noout -serial -in $1 | sed -e 's/.*=//' }
+
 ##########################
 # Sorted assorted
 ##########################
