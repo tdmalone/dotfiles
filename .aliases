@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # shellcheck shell=bash
 
 ####################################################################################################
@@ -26,7 +27,75 @@
 # New unsorted
 ##########################
 
-# ...
+alias cfnl='cfn-lint **/*.yaml'
+
+alias sectriage="sed -e 's/[A-Z]/+/g' -e 's/^\+/scale=2; (/' -e 's/$/)\/16/' | bc --mathlib"
+alias c9describe='aws cloud9 describe-environments --environment-ids $(aws cloud9 list-environments | jq -r ".environmentIds[]")'
+alias c9share='aws cloud9 create-environment-membership \
+    --environment-id $(aws cloud9 list-environments | jq -r ".environmentIds[]") \
+    --user-arn $(aws sts get-caller-identity | jq -r .Arn) \
+    --permissions read-write'
+alias c9mships='aws cloud9 describe-environment-memberships'
+
+function ess() {
+  realm="${1}"
+  hostname="${2}"
+  #sudo true # Only needed (for convenience - to get password up front) if port is < 1024
+  eval "a${realm}"
+  AWS_TUNNEL_SKIP_CHECKS="${AWS_TUNNEL_SKIP_CHECKS:-true}" aws_tunnel ${hostname} 443 "${TF_VAR_elasticsearch_port}"
+  areset
+}
+
+alias igrep='grep -i'
+alias tpv='tpview'
+alias tpvt='tpviewtarget'
+alias tipv='ti && tpv'
+
+alias git_lose_last_commit='git uncommit && git reset && gco .'
+
+alias soun='sort | uniq'
+
+alias raq='read_app_queue'
+
+alias ace_dev_env='kops && aops && aws_tunnel man-db.o && aws_tunnel db-r-01.o 6379 6379 && awslt && assh man.o'
+alias ec='ecctl'
+export ecid='eb791499706f42e7ad11b7676fd4ccc1'
+alias sbd='sam build --use-container && sam deploy'
+
+alias fbd='cd ~/functionbeat && ./functionbeat -v -e -d "*" deploy -c ~/astute/lambdaland/functionbeat/functionbeat.yml -E cloud.id="${ELASTIC_CLOUD_ID}" -E cloud.auth="${ELASTIC_USERNAME_AWS_LOG_INGEST}:${ELASTIC_PASSWORD_AWS_LOG_INGEST}"'
+alias fbu='cd ~/functionbeat && ./functionbeat -v -e -d "*" update -c ~/astute/lambdaland/functionbeat/functionbeat.yml -E cloud.id="${ELASTIC_CLOUD_ID}" -E cloud.auth="${ELASTIC_USERNAME_AWS_LOG_INGEST}:${ELASTIC_PASSWORD_AWS_LOG_INGEST}"'
+alias fbdcw='(fbd functionbeat-ingest-cloudwatch-logs)'
+alias fbdsqs='(fbd functionbeat-ingest-sqs-to-elasticsearch)'
+alias fbucw='(fbu functionbeat-ingest-cloudwatch-logs)'
+alias fbusqs='(fbu functionbeat-ingest-sqs-to-elasticsearch)'
+
+# Add '--disable-noqa' to ignored 'skipped' errors
+alias pyl='echo -e "\nlinting with flake8...\n" && python3.8 -m flake8 --count --show-source && echo "all is good!"'
+alias pyt='PYTHONPATH="${PWD}/handlers:${PYTHONPATH}" python3.8 -m pytest --verbose'
+alias pytrp='pyt -rP' # Includes output from everrrrything
+alias pylt='pyl && echo && pyt'
+alias pytc='python3.8 -m coverage run -m pytest && coverage html && open htmlcov/index.html'
+
+alias ssht='ssh tim'
+
+alias terraform='terraform0.13'
+alias tf011='terraform0.11'
+alias tf012='tf 0.12upgrade'
+alias t011='tf011'
+alias t012='tf012'
+alias tf11='tf011'
+alias tf12='tf012'
+alias t11='tf011'
+alias t12='tf012'
+
+alias tf_list_resource_types="tfsl | sed -e 's/module\.[A-Za-z0-9_]*\.//g' -e 's/\[[a-z0-9\.\"\*-_]*\]//g' -e 's/\.[a-z0-9_-]*$//' -e 's/^data\.//' | sort | uniq"
+
+alias rmb='remove_multiple_blanks'
+alias teb='tighten_empty_blocks'
+
+alias pa='pull_all'
+
+alias tniceplan="ggrep --invert --extended-regexp '^(Refreshing Terraform state in-memory|The refreshed state will be used|persisted to local or remote|.*: Refreshing state\.\.\.|An execution plan has been|Terraform will perform the following|Resource actions are indicated with|\s+\+ create|\s+~ update|\s+\- destroy|\-/\+ destroy|\s?<= read|\-{72}|This means that Terraform did not detect|configuration and real physical resources|actions need to be performed)' | ggrep --invert --extended-regexp '^\s+([a-zA-Z]|\"|\{|\}|\(|\)|\[|\])' | ggrep --invert --extended-regexp '\(known after apply\)$' | gsed 's/\s\+{$//' | gsed 's/\s\+\[$//' | gsed 's/($//' | gsed 's/,$//' | gsed $'s/^\\\(Plan: .*\\\)$/\\\1\\\n/g' | gcat --squeeze-blank"
 
 ##########################
 # Sorted assorted
