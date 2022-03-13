@@ -104,7 +104,7 @@ alias tniceplan="ggrep --invert --extended-regexp '^(Refreshing Terraform state 
 alias c='cls'
 alias calc='echo "Enter your maths equations, or type \"quit\" to exit." && bc --quiet'
 alias cls='clear'
-alias conn='ping 61.88.88.88'
+alias conn='ping 8.8.8.8'
 #alias conn='ping google.com'
 alias copy='pbcopy'
 
@@ -113,6 +113,7 @@ alias disk='sudo du -d1 -hx | sort -rh'
 alias e='exit'
 alias ecn='echo -n'
 alias ex='export'
+alias exp='export'
 alias exe='chmod +x'
 
 alias flushdns='sudo killall -HUP mDNSResponder' # Only useful on Macs.
@@ -131,11 +132,13 @@ alias rec='asciinema rec'
 
 alias s='sudo su -'
 alias sc='screen -rd || screen'
+alias scr='scratchpad'
 alias scratch='scratchpad'
 alias scratchpad='code ~/Desktop/scratchpad'
 alias screen='screen -rd || screen'
 alias scwd='sudo su'
 alias sp='scratchpad'
+alias suniq='sort | uniq'
 
 # Make sudo work with aliases. May not work properly though...
 # @see https://askubuntu.com/a/22043/421637
@@ -180,6 +183,8 @@ alias sconfig='sshc'
 alias sshc='code ~/.ssh/config'
 alias sshconfig='sshc'
 alias sshcvi='vi ~/.ssh/config'
+alias sshkh='code ~/.ssh/known_hosts'
+alias sshkn='code ~/.ssh/known_hosts'
 
 alias zconfig='zshc'
 alias zshc='code ~/.zshrc'
@@ -196,10 +201,10 @@ alias zshrc='code ~/.zshrc'
 alias ag='ansible-galaxy'
 alias agi='ag install'
 alias an='ansible'
-alias ap='ansible-playbook --diff --inventory="${TIM_WORK_HOMEDIR}/ansible/aws-inventory"'
+alias ap='ansible-playbook --diff --inventory "${TIM_WORK_HOMEDIR}/ansible/aws-inventory"'
 alias apb='ap'
 alias apbm='apm'
-alias apm='ap main.yml'
+alias apm='ap main.yml --vault-password-file "${HOME}/.ansible/$(basename $(pwd))"'
 alias apml='apm --limit'
 alias apmt='apm --tag'
 
@@ -224,12 +229,21 @@ alias amfa='areset && aws-mfa'
 alias amfaf='amfa --force'
 alias amp='amplify'
 
+alias ascp='aws_scp'
 alias asmfa='areset && aws-mfa --assume-role arn:aws:iam::${AWS_WORK_TIM_ACCOUNT_ID}:role/OrganizationAccountAccessRole --duration 43200'
 alias asu='asudo'
+alias assh='aws_ssh'
 
-alias aupd='rm -f ${HOME}/.zshrc_tdm_aws_context.*'
+alias aupd='rm -f ~/.zshrc_tdm_aws_context.* || true'
 
 alias awscs='aws configure set'
+alias awskt='awstk'
+alias awslt='awstl'
+alias awsm='mysql --host 127.0.0.1 --port 10010 --password --user'
+alias awss='areset && aws_switch'
+alias awst='awstl && AWS_TUNNEL_SKIP_CHECKS="${AWS_TUNNEL_SKIP_CHECKS:-true}" aws_tunnel'
+alias awstk='aws_tunnel --kill-all'
+alias awstl='aws_tunnel --list'
 
 alias cll='aws logs'
 
@@ -245,15 +259,19 @@ alias kms='aws kms'
 alias r53='aws route53'
 alias r53d='aws route53domains'
 alias rds='aws rds'
+alias running_instances='ec2 describe-instances --filters Name=instance-state-name,Values=running | jqr ".Reservations[].Instances[].Tags[] | select(.Key == \"Name\").Value" | sort'
 
 alias s3='aws s3'
 alias s32='aws s3api'
 alias s3a='aws s3api'
+alias si='start_instance'
+alias si2='stop_instance'
 alias sns='aws sns'
 alias sqs='aws sqs'
 alias sts='aws sts'
 
 alias term_instance='terminate_instance'
+#alias ti='terminate_instance'
 
 ##########################
 # AWS EC2
@@ -270,6 +288,9 @@ alias ec2='aws ec2'
 alias ek='ak'
 alias eks='aws eks'
 alias eksc='eksctl'
+
+# TODO: awstk - but only for k8s tunnels??
+alias k8ss='areset && AWS_TUNNEL_SKIP_CHECKS="${AWS_TUNNEL_SKIP_CHECKS:-true}" AWS_SWITCH_MODE="smart" AWS_TUNNEL_LOCAL_PORT="${TF_VAR_k8s_port}" k8s_switch'
 
 alias kaws='ak'
 alias kaws2='kubernetic && kuse kubernetic'
@@ -297,12 +318,24 @@ alias dda='sudo datadog-agent'
 # Docker
 ##########################
 
+alias docker-composer='docker-compose'
+
 alias datt="docker attach \$(basename \$(pwd))Instance" # Reattach a terminal & stdin.
+alias dcb="dcp build"
 alias dcd="dcp down"
 alias dcdv="dcd --volumes"
+alias dceb="dcp exec app bash"
+alias dcl="dcp logs --follow"
 alias dcp="docker-compose"
+alias dcr="dcp run --rm"
+alias dcrb="dcp run app bash"
+alias dcrs="dcdv && dcud"
 alias dcs="dcp stop"
 alias dcu="dcp up"
+alias dcub="dcu --build"
+alias dcud="dcu --detach"
+alias dcubd="dcub --detach"
+alias dcudb="dcub --detach"
 alias di="docker images"
 alias dlog="docker logs \$(basename \$(pwd))Instance"
 alias drm="dstop && docker rm \$(basename \$(pwd))Instance"
@@ -314,7 +347,8 @@ alias dstart="docker start \$(basename \$(pwd))Instance"
 alias dstop="docker stop \$(basename \$(pwd))Instance"
 
 # @see https://stackoverflow.com/questions/44722341/docker-login-unknown-shorthand-flag-e
-alias daws='$(AWS_DEFAULT_REGION="${AWS_TIM_DESIRED_REGION}" ecr get-login --no-include-email)'
+#alias daws='$(AWS_DEFAULT_REGION="${AWS_TIM_DESIRED_REGION}" ecr get-login --no-include-email)'
+alias daws='AWS_DEFAULT_REGION="${AWS_TIM_DESIRED_REGION}" ecr get-login-password | docker login --username AWS --password-stdin "${AWS_WORK_MASTER_ACCOUNT_ID}.dkr.ecr.${AWS_TIM_DESIRED_REGION}.amazonaws.com"'
 alias dlogin="daws"
 
 # WARNING: Some of these have only been tested in Git Bash on Windows.
@@ -363,20 +397,24 @@ alias gcmvb="git commit -m \"Version bump\" && gt"
 alias gcmvbc="git commit -m \"Version bump; changelog\" && gt"
 alias gco='git checkout'
 alias gcob='git checkout -b'
+alias gcod='git checkout develop'
 alias gcom='git checkout master'
 alias gcp='git cherry-pick'
 
 alias gd='git diff'
 alias gdb='git delbranch'
 alias gdc='git diff --cached'
+alias gdm='git delmerged'
 
 alias gf='git fix'
 alias gg='git grep --ignore-case'
-alias gh='git hub'
+alias ggh='git grep --max-depth=0' # i.e. 'git grep here'
+#alias gh='git hub'
 
 alias gl='git latest'
 alias glm='gl --no-merges'
 alias glmm='glm master..'
+alias glmd='glm develop..'
 
 alias gm='git merge'
 
@@ -384,20 +422,27 @@ alias gn='git noff'
 alias gnb='git newbranch'
 
 alias gp='git push'
-alias gpf='git push --force'
+alias gpf='gp --force'
+alias gpft='gp --follow-tags'
 alias gpl='git pull'
-alias gpr='git pull --rebase'
-alias gpta='git push && git push --tags'
-alias gpuo='git push --set-upstream origin'
+alias gpr='gpl --rebase'
+alias gpta='gp && gp --tags'
+alias gpuo='gp --set-upstream origin'
 
-alias gr='git remote --verbose'
+alias gr='grv'
+alias grb='git rebase'
+alias grbi='git rebase --interactive'
 alias grso='git remote set-url origin'
+alias grv='git remote --verbose'
 
 alias gs='git status'
 alias gse='git show-encrypted'
+alias gsp='git stash --patch'
 
 alias gt='git tag'
 alias gu='git update'
+alias gus='git unstash'
+alias gup='git stash && gcom && gpl && gdm'
 
 # TODOs without a ticket:
 alias tdt='git grep TODO | grep -v "TODO: \[OP-" | grep -v "TODO: Reference "'
@@ -471,16 +516,21 @@ alias h='helm'
 alias k='kubectl'
 
 alias ka='k apply'
+alias kaf='ka --filename'
 alias kapi='k api-resources | sort'
 alias kas='kns "${K8S_TIM_DESIRED_NAMESPACE}"'
 alias kaskp='kas && kp'
 
 alias kc='k config'
+alias kccc='kc current-context'
+alias kcgc='kc get-contexts'
+alias kci='k cluster-info'
 alias kcon='kc current-context'
-alias kcp='k cp'
+#alias kcp='k cp'
 
 # @see https://github.com/kubernetes/kubectl/issues/483#issuecomment-474112855
-alias kclear='sed -i.bak -e"s/^current-context:.*$/current-context:/" ~/.kube/config'
+#alias kclear='sed -i.bak -e"s/^current-context:.*$/current-context:/" ~/.kube/config'
+alias kclear='kubectl config unset current-context'
 alias kclr='kclear'
 
 alias kd='k describe'
@@ -493,12 +543,13 @@ alias kdi='kd ingress'
 alias kdn='kd nodes'
 alias kdp='kd pods'
 alias kds='kd svc'
-alias kdtoken='kgse $(kgsa dashboard --namespace monitoring --output jsonpath="{.secrets[0].name}") --namespace monitoring --output jsonpath="{.data.token}" | base64 --decode | copy && echo "A Kubernetes dashboard token has been copied to your clipboard."'
+alias kdtoken='kgse $(kgsa kubernetes-dashboard --namespace monitoring --output jsonpath="{.secrets[0].name}") --namespace monitoring --output jsonpath="{.data.token}" | base64 --decode | copy && echo "A Kubernetes dashboard token has been copied to your clipboard."'
 alias kdt='kdtoken'
 
 alias ke='kex'
 alias kex='k exec'
 alias ked='k edit'
+alias kedit='ked'
 
 alias kg='k get'
 alias kgcr='kg clusterroles'
@@ -521,8 +572,11 @@ alias khpw='khp --watch'
 
 alias ki='kgi'
 
-alias kl='k logs'
+alias kl='k logs --all-containers=true --follow=true'
 alias klo='kclear'
+
+alias kmon='kns monitoring'
+alias kmonkp='kmon && kp'
 
 alias kn='kgn'
 alias kname='kns'
@@ -534,8 +588,9 @@ alias knw='kn --watch'
 alias kp='kgp'
 alias kpal='kp --all-namespaces'
 alias kpan='kpal'
+alias kpen='kpal | grep Pending || true'
 alias kpw='kp --watch'
-alias kpx='kdtoken && open "http://localhost:8001/api/v1/namespaces/monitoring/services/https:dashboard:/proxy/#!/overview?namespace=main" && k proxy &'
+alias kpx='kdtoken && open "http://localhost:8001/api/v1/namespaces/monitoring/services/https:kubernetes-dashboard:/proxy/#/overview?namespace=astute" && k proxy &'
 
 alias kr='krestart'
 
@@ -602,6 +657,7 @@ alias mt='m test'
 alias ng='ngrok'
 alias ng5k='ngrok 5000'
 alias ngrok='~/ngrok http --subdomain "${NGROK_TIM_DESIRED_SUBDOMAIN}" --region au'
+alias ngrok='~/ngrok http --region au'
 
 ##########################
 # Node.js
@@ -614,7 +670,9 @@ alias ni='node index.js'
 ##########################
 
 alias pb='pk build'
-alias pbc='../../build.sh .'
+alias pbc='amfa && ../../build.sh .'
+alias pbcd='pbcdebug'
+alias pbcdebug='amfa && PACKER_DEBUG_MODE=true ../../build.sh .'
 
 alias pk='packer'
 alias pkv='pv'
@@ -647,10 +705,21 @@ alias pt='papertrail'
 ##########################
 
 alias pip='pip3'
+alias pipclean='venv && pip freeze | grep -v "^-e" | xargs pip uninstall -y'
 alias pl='pylint'
+alias pla='pylint ace'
+alias pla2='dcb && dcr --rm app pylint ace'
 alias pll='pl lambda_function.py | less'
 alias py='python'
-alias python='python3'
+#alias python='python3'
+
+alias ve='venv'
+alias vcreate='vecreate'
+alias vec='vecreate'
+alias vecreate='python3 -m venv venv'
+alias ved='deactivate'
+alias venv='source venv/bin/activate'
+alias vupd='venv && pip3 install --editable . && pip3 install --requirement requirements-dev.txt'
 
 ##########################
 # Serverless
@@ -676,7 +745,9 @@ alias terminus='~/vendor/bin/terminus'
 # Terraform
 ##########################
 
-alias lnd='landscape'
+function terraform_modules_used_in_this_folder(){
+  ggh source | awk '{print $4}' | grep '\.\./' | grep -v '\.\./\.\.x/' | sed -e 's/"//g' -e 's/\(\.\.\/\)*\(modules\/\)*//' | soun
+}
 
 alias t='terraform'
 alias tf='t'
@@ -684,42 +755,56 @@ alias tf='t'
 alias ta='t apply'
 alias taa='echo "TERRAFORM WILL AUTO APPROVE - ARE YOU SURE?" && printf "Press any key to continue..." && read ans && ta -auto-approve'
 alias tai='tanow'
-alias tal='ta | lnd'
 alias tanow='t apply -var "apply_immediately=true"'
 alias tap='ta -parallelism=1'
-alias tat='ta -target'
-alias tata='taa -target'
-alias tatp='tap -target'
+alias tat='tf_target ta'
+alias tata='tf_target taa'
+alias tatp='tf_target tap'
+alias tiat='ti && tat'
 alias tfa='ta'
 alias tfaa='taa'
 
 alias tfc='t console'
 
 alias tfd='t destroy'
-alias tfdt='tfd -target'
+alias tfdt='tf_target tfd'
 alias tfdaa='echo "!!! DESTROY !!! TERRAFORM WILL AUTO APPROVE THIS DESTROY - ARE YOU SURE?" && printf "Press any key to continue..." && read ans && tfd -auto-approve'
-alias tfdtaa='tfdaa -target'
+alias tfdtaa='tf_target tfdaa'
 
 alias tff='tf fmt'
+alias tff="find . -name '*.tf' | sed 's/^\.\/\(.*\)\/.*/\1/' | sort | uniq | xargs -I % terraform fmt %"
+alias tff='tf fmt -recursive'
+alias tfind='tfsl | grep'
 
 alias ti='t init'
 alias tia='ti && ta'
 alias tin='ti'
+alias tip='ti && tp'
+alias tir='ti --reconfigure'
 alias tiu='ti -upgrade=true'
+alias tiv='ti && tv'
 alias tfi='ti'
 alias tfin='ti'
 alias tfim='t import'
 
 alias tfl='tflint'
-alias tflint='docker run --rm --tty --volume "$( pwd )":/data wata727/tflint --error-with-issues --quiet'
+#alias tflint='docker run --rm --tty --volume "$( pwd )":/data wata727/tflint --error-with-issues --quiet'
+alias tflint="find . -name '*.tf' | sed 's/^\.\(.*\)\/\(.*\)\.tf$/.\1/' | sed 's/^\///' | sort | uniq | grep -v '/modules/' | xargs -I % bash -c 'echo % && cd % && tflint --deep --module'"
 
 alias tfo='t output'
+alias to='tfo'
 
 alias tp='t plan'
-alias tpl='tp | lnd'
+alias tplf='tp -lock=false'
+alias tplfo='tplf -out'
+alias tplft='tplf -target'
 alias tpo='tp -out'
-alias tpt='tp -target'
+alias tpt='tf_target tp'
 alias tfp='tp'
+
+alias tq='tquick'
+alias tqt='tf_target tq'
+alias tquick='tp -refresh=false -lock=false -input=false'
 
 alias tfr='t refresh'
 
@@ -727,6 +812,8 @@ alias tfsl='t state list'
 alias tfsm='t state mv'
 alias tfsr='tfsrm'
 alias tfsrm='t state rm'
+alias tfs='tf show'
+alias tfsnc='tfs -no-color'
 alias tfss='t state show'
 
 alias tft='t taint'
@@ -735,10 +822,13 @@ alias tftm='tft -module'
 alias tu='t force-unlock -force'
 alias tfu='t init -upgrade'
 alias tfunlock='tu'
+alias tfut='t untaint'
 
 alias tv='t validate'
 alias tval='tv'
 alias tfv='t version'
+
+alias which_resources="gg -E '^(resource|data) \"' | sed -Ee 's/.*:(resource|data) \"(.*)\".*/\2/g' -e 's/\".*//g' | suniq"
 
 ##########################
 # Travis CI CLI
