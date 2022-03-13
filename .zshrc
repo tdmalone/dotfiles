@@ -18,18 +18,23 @@ export ZSH="${HOME}/.oh-my-zsh"
 #POWERLEVEL9K_MODE="awesome-fontconfig" # TODO: These 'bonus' fonts don't appear to work :(
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
+# Prevent python virtualenvs from changing the prompt, in case it affects powerlevel9k.
+VIRTUAL_ENV_DISABLE_PROMPT=1
+
 # Customise powerlevel9k prompt - if powerlevel9k theme is activated above.
 # @see https://github.com/bhilburn/powerlevel9k#prompt-customization
 #POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 # if [ $(tput cols) -gt 100 ]; then
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(vcs         custom_aws kubecontext newline dir custom_dollarsign)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(vcs         custom_aws kubecontext newline dir custom_virtualenv custom_dollarsign)
 # else
 # POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(vcs newline custom_aws kubecontext newline dir custom_dollarsign)
 # fi
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time history time)
 POWERLEVEL9K_CUSTOM_AWS="tdm_aws_context"
 POWERLEVEL9K_CUSTOM_AWS_BACKGROUND="150"
+POWERLEVEL9K_CUSTOM_VIRTUALENV="tdm_virtualenv"
+POWERLEVEL9K_CUSTOM_VIRTUALENV_BACKGROUND="138"
 POWERLEVEL9K_CUSTOM_DOLLARSIGN="echo \$"
 #POWERLEVEL9K_CUSTOM_DOLLARSIGN_BACKGROUND="yellow"
 POWERLEVEL9K_SHOW_CHANGESET="true"
@@ -139,6 +144,11 @@ tdm_aws_context() {
 
 } # tdm_aws_context
 
+tdm_virtualenv() {
+  if [ -z "${VIRTUAL_ENV}" ]; then return; fi
+  echo "venv: $(basename "${VIRTUAL_ENV%/venv}")"
+}
+
 # Enables command auto-correction.
 ENABLE_CORRECTION="true"
 
@@ -164,6 +174,12 @@ source "${HOME}/.env"
 source "${HOME}/.aliases"
 source "${HOME}/.functions"
 
+# Additions to the PATH
+# PATH="${PATH}:/Users/tim/Library/Python/3.7/bin"
+export PATH="/Users/tim/.pyenv/bin:$PATH"
+export PATH="/usr/local/opt/python@3.5/bin:/Users/tim/Library/Python/3.5/bin:$PATH"
+export PATH="$PATH:/Users/tim/.local/bin"
+
 # Settings added by other packages follow. Usually for shell completion.
 
 # Initialise bash completions.
@@ -180,23 +196,41 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # Vault.
 complete -o nospace -C /usr/local/bin/vault vault
 
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
+# Serverless framework.
+# Uninstall by removing these lines or running `tabtab uninstall serverless && tabtab uninstall sls`.
 [[ -f /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/serverless.zsh
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/tim/.config/yarn/global/node_modules/tabtab/.completions/sls.zsh
+
+# Terraform.
 complete -o nospace -C /usr/local/bin/terraform terraform
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/tim/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tim/google-cloud-sdk/path.zsh.inc'; fi
+# ecctl
+source <(ecctl generate completions)
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/tim/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tim/google-cloud-sdk/completion.zsh.inc'; fi
+# AWS CLI
+complete -C '/usr/local/bin/aws_completer' aws
+
+# Update PATH for the Google Cloud SDK.
+if [ -f '/Users/tim/google-cloud-sdk/path.zsh.inc' ]; then
+  source '/Users/tim/google-cloud-sdk/path.zsh.inc'
+fi
+
+# Completion for gcloud.
+if [ -f '/Users/tim/google-cloud-sdk/completion.zsh.inc' ]; then
+  source '/Users/tim/google-cloud-sdk/completion.zsh.inc'
+fi
 
 # Enable kube-ps1.
 # @see https://github.com/jonmosco/kube-ps1
 # source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
 # PS1='$(kube_ps1) %~ # '
 
-PATH="${PATH}:/Users/tim/Library/Python/3.7/bin"
+# pyenv
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+PATH="/usr/local/bin:$PATH"
+
+# AWS CLI pager disable
+export AWS_PAGER=
+
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
