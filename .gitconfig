@@ -1,19 +1,25 @@
 [core]
   editor = /usr/bin/vim
   pager = cat
+  excludesfile = /Users/tim/.gitignore_global
+
 [user]
   name = Tim Malone
   email = tdmalone@gmail.com
+
 [commit]
   gpgsign = true
 [gpg]
   program = /opt/homebrew/bin/gpg
 [grep]
   linenumber = true
+
 [interactive]
   singleKey = true
+
 [push]
   default = simple
+
 [alias]
 
   # Aliases are generally sorted in groups, but they could probably be sorted
@@ -37,6 +43,7 @@
 
   # Deletes a branch both locally AND remotely.
   delbranch = !sh -c 'git branch -d $1 && git push origin --delete refs/heads/$1' -
+  dellocal = !sh -c 'git branch -D $1' -
 
   # Creates a new branch off the current HEAD, and sets the upstream to the same name.
   newbranch = !sh -c 'git checkout -b $1 && git push -u origin $1' -
@@ -58,6 +65,8 @@
   amend = commit --amend --no-edit
 
   grepall = !sh -c 'git rev-list --all --abbrev-commit | xargs git grep -n $1' -
+  grepalli = !sh -c 'git rev-list --all --abbrev-commit | xargs git grep -i -n $1' -
+  #git log --all --grep='pagerduty'   # Version to grep through commit msgs instead
   added = !git lold --diff-filter=A
   deleted = !git lold --diff-filter=D
   modified = !git lold --diff-filter=M
@@ -123,7 +132,7 @@
   awsclone = !sh -c 'git clone ssh://git.tm.id.au/v1/repos/'"${1}"
   awsauclone = !sh -c 'git clone ssh://git.au.tm.id.au/v1/repos/'"${1}"
   awsusclone = !sh -c 'git clone ssh://git.us.tm.id.au/v1/repos/'"${1}"
-  apclone = !sh -c 'git clone git@bitbucket.org:astutepayroll/'"${1}"'.git'
+  kblmclone = !sh -c 'git clone git@github.com:KablamoOSS/'"${1}"'.git'
 
   # Shortcut for 'git show --show-signature <commitish>'
   sig = show --show-signature
@@ -131,3 +140,20 @@
   whatedited = !sh -c 'git log --full-history -- '"${1}"
 
   show-encrypted = !sh -c 'git-crypt status | grep -v \"not encrypted\"'
+
+[filter "lfs"]
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+
+[pull]
+  rebase = true
+
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+
+[mergetool "sourcetree"]
+  cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
